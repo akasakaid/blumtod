@@ -218,7 +218,8 @@ class BlumTod:
         self.log(self.garis)
         while True:
             list_countdown = []
-            for data in datas:
+            for no,data in enumerate(datas):
+                self.log(f'{hijau}account number - {putih}{no}')
                 access_token = self.renew_access_token(data)
                 self.get_friend(access_token)
                 self.solve_task(access_token)
