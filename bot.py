@@ -109,6 +109,8 @@ class BlumTod:
             return True, end_farming
 
         self.log(f"{kuning}not time to claim farming !")
+        end_date = datetime.fromtimestamp(end_farming)
+        self.log(f'{hijau}end farming : {putih}{end_date}')
         return False, end_farming
 
     def start_farming(self, access_token):
