@@ -1,5 +1,7 @@
 # Blumtod
 
+AUTO CLAIM FOR BLUM / @BlumCryptoBot
+
 # Table of Contents
 - [Blumtod](#blumtod)
 - [Table of Contents](#table-of-contents)
