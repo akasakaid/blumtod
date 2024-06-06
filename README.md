@@ -8,6 +8,7 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 - [Feature](#feature)
 - [Register ?](#register-)
 - [How to Use](#how-to-use)
+- [Play Game Configuration](#play-game-configuration)
 - [Video Guide to Get Data](#video-guide-to-get-data)
 - [Javascript Command to Get Telegram Data for Desktop](#javascript-command-to-get-telegram-data-for-desktop)
 - [Run for 24/7](#run-for-247)
@@ -18,6 +19,7 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 # Feature
 
 - [x] Auto Claim
+- [x] Auto Play Game (random input from user) see [Play Game Configuration](#play-game-configuration)
 - [x] Auto Claim Bonus Referral
 - [x] Auto Compelte Task
 - [x] Support Multi Account
@@ -100,6 +102,11 @@ My referral is full so i dont need referral again, ask u friend for invitation c
    ```shell
    python3 bot.py
    ```
+
+# Play Game Configuration
+
+Edit `config.json` to set your point that your want !
+
 
 # Video Guide to Get Data
 
