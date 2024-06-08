@@ -19,11 +19,11 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 # Feature
 
 - [x] Auto Claim
-- [x] Auto Play Game (random input from user) see [Play Game Configuration](#play-game-configuration)
+- [x] Auto Claim Daily
 - [x] Auto Claim Bonus Referral
 - [x] Auto Compelte Task
 - [x] Support Multi Account
-- [ ] Auto Claim Daily
+- [x] Auto Play Game (random input from user) see [Play Game Configuration](#play-game-configuration)
 
 # Register ?
 
