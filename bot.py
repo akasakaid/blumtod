@@ -284,6 +284,7 @@ class BlumTod:
                 list_countdown.append(res_bal)
                 self.playgame(access_token)
                 self.log(self.garis)
+                self.countdown(10)
             min_countdown = min(list_countdown)
             now = int(time.time())
             result = min_countdown - now
