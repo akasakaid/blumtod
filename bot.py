@@ -149,6 +149,22 @@ class BlumTod:
             self.log(f"{merah}failed claim referral bonus !")
             return
     
+    def checkin(self,access_token):
+        url = "https://game-domain.blum.codes/api/v1/daily-reward?offset=-420"
+        headers = self.base_headers.copy()
+        headers["Authorization"] = f"Bearer {access_token}"
+        res = self.http(url,headers)
+        if res.status_code == 404:
+            self.log(f"{kuning}already check in today !")
+            return
+        res = self.http(url,headers,'')
+        if "ok" in res.text.lower():
+            self.log(f'{hijau}success check in today !')
+            return
+        
+        self.log(f'{merah}failed check in today !')
+        return
+    
     def playgame(self,access_token):
         url_play = "https://game-domain.blum.codes/api/v1/game/play"
         url_claim = "https://game-domain.blum.codes/api/v1/game/claim"
@@ -273,6 +289,7 @@ class BlumTod:
                 user = json.loads(data_parse['user'])
                 self.log(f"{hijau}login as : {putih}{user['first_name']}")
                 access_token = self.renew_access_token(data)
+                self.checkin(access_token)
                 self.get_friend(access_token)
                 self.solve_task(access_token)
                 status, res_bal = self.get_balance(access_token)
