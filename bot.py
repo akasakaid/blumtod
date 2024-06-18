@@ -337,18 +337,22 @@ class BlumTod:
                 userid = user['id']
                 self.log(f"{hijau}login as : {putih}{user['first_name']}")
                 access_token = self.get_local_token(userid)
+                failed_fetch_token = False
                 while True:
                     if access_token is False:
                         access_token = self.renew_access_token(data)
                         if access_token is False:
                             self.save_failed_token(userid,data)
-                            continue
+                            failed_fetch_token = True
+                            break
                         self.save_local_token(userid,access_token)
                     expired = self.is_expired(access_token)
                     if expired:
                         access_token = False
                         continue
                     break
+                if failed_fetch_token:
+                    continue
                 self.checkin(access_token)
                 self.get_friend(access_token)
                 if auto_task:
