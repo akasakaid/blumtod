@@ -11,6 +11,7 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
   - [Windows](#windows)
   - [Linux](#linux)
   - [Termux](#termux)
+- [Config.json configuration](#configjson-configuration)
 - [Bot.py parameter feature](#botpy-parameter-feature)
 - [Play Game Configuration](#play-game-configuration)
 - [Video Guide to Get Data](#video-guide-to-get-data)
@@ -138,6 +139,12 @@ My referral is full so i dont need referral again, ask u friend for invitation c
    ```
    python bot.py
    ```
+
+# Config.json configuration
+
+| Key      | value & description                                                   |
+| -------- | --------------------------------------------------------------------- |
+| interval | value can be inteter or float <br> interval is delay between accounts |
 
 # Bot.py parameter feature
 
