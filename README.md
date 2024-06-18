@@ -8,6 +8,10 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 - [Feature](#feature)
 - [Register ?](#register-)
 - [How to Use](#how-to-use)
+  - [Windows](#windows)
+  - [Linux](#linux)
+  - [Termux](#termux)
+- [Bot.py parameter feature](#botpy-parameter-feature)
 - [Play Game Configuration](#play-game-configuration)
 - [Video Guide to Get Data](#video-guide-to-get-data)
 - [Javascript Command to Get Telegram Data for Desktop](#javascript-command-to-get-telegram-data-for-desktop)
@@ -20,10 +24,10 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 
 - [x] Auto Claim
 - [x] Auto Claim Daily
-- [x] Auto Claim Bonus Referral
-- [x] Auto Compelte Task
 - [x] Support Multi Account
-- [x] Auto Play Game (random input from user) see [Play Game Configuration](#play-game-configuration)
+- [x] Auto Claim Bonus Referral
+- [x] Auto Complete Task, see [Bot.py parameter feature](#botpy-parameter-feature)
+- [x] Auto Play Game (random input from user), see [Play Game Configuration](#play-game-configuration)
 
 # Register ?
 
@@ -31,82 +35,132 @@ My referral is full so i dont need referral again, ask u friend for invitation c
 
 # How to Use
 
-1. Make sure your computer was installed python and git.
+## Windows 
+
+1. Make sure you computer was installed python and git.
+   
+   python site : [https://python.org](https://python.org)
+   
+   git site : [https://git-scm.com/](https://git-scm.com/)
 
 2. Clone this repository
    ```shell
-   git clone https://github.com/akasakaid/blumtod.git
-   ```
-3. Go to blumtod
-   ```
-   cd blumtod
-   ```
-4. Install python library
-   
-   Windows
-   ```
-   pip install -r requirements.txt
+   git clone https://github.com/akasakaid/dormintod.git
    ```
 
-   or 
+3. goto dormintod directory
+   ```
+   cd dormintod
+   ```
 
+4. install the require library
    ```
    python -m pip install -r requirements.txt
    ```
 
-   Linux
+5. Edit `data.txt`, input you data token in `data.txt`, find you token in [How to Find Account Token](#how-to-find-account-token). One line for one data account, if you want add you second account add in new line!
 
+6. execute the main program 
    ```
-   pip3 install -r requirements.txt
+   python bot.py
    ```
 
-   or
+## Linux
 
+1. Make sure you computer was installed python and git.
+   
+   python
+   ```shell
+   sudo apt install python3 python3-pip
+   ```
+   git
+   ```shell
+   sudo apt install git
+   ```
+
+2. Clone this repository
+   
+   ```shell
+   git clone https://github.com/akasakaid/dormintod.git
+   ```
+
+3. goto dormintod directory
+
+   ```shell
+   cd dormintod
+   ```
+
+4. Install the require library
+   
    ```
    python3 -m pip install -r requirements.txt
    ```
 
-5. Get Telegram data
-   
-   1. Active web inspecting in telegram app, How to activate follow the video [https://youtu.be/NYxHmck_GjE](https://youtu.be/NYxHmck_GjE)
-   2. Goto pixeltap bot and open the apps
-   3. Press `F12` on your keyboard to open devtool or right click on app and select `Inspect`
-   4. Goto `console` menu and copy [javascript code](#javascript-command-to-get-telegram-data-for-desktop) then paste on `console` menu
-   5. If you don't receive error message, it means you successfully copy telegram data then paste on `data.txt` (1 line for 1 telegram data)
-   
-   Example telegram data
+5. Edit `data.txt`, input you data token in `data.txt`, find you token in [How to Find Account Token](#how-to-find-account-token). One line for one data account, if you want add you second account add in new line!
 
+6. execute the main program 
    ```
-   query_id=xxxxxxxxxx&user=xxxxxxfirst_namexxxxxlast_namexxxxxxxusernamexxxxxxxlanguage_codexxxxxxxallows_write_to_pmxxxxxxx&auth_date=xxxxxx&hash=xxxxxxxxxxxxxxxxxxxxx
-   ```
-
-   6. If you want to add more account. Just paste telegram second account data in line number 2.
-   
-   Maybe like this sample in below
-
-   ```
-   1.query_id=xxxxxxxxxx&user=xxxxxxfirst_namexxxxxlast_namexxxxxxxusernamexxxxxxxlanguage_codexxxxxxxallows_write_to_pmxxxxxxx&auth_date=xxxxxx&hash=xxxxxxxxxxxxxxxxxxxxx
-   2.query_id=xxxxxxxxxx&user=xxxxxxfirst_namexxxxxlast_namexxxxxxxusernamexxxxxxxlanguage_codexxxxxxxallows_write_to_pmxxxxxxx&auth_date=xxxxxx&hash=xxxxxxxxxxxxxxxxxxxxx
-   ```
-
-6. Run the bot
-   
-   Windows
-   
-   ```shell
    python bot.py
    ```
 
-   Linux
+## Termux
 
-   ```shell
-   python3 bot.py
+1. Make sure you termux was installed python and git.
+   
+   python
    ```
+   pkg install python
+   ```
+
+   git
+   ```
+   pkg install git
+   ```
+
+2. Clone this repository
+   ```shell
+   git clone https://github.com/akasakaid/dormintod.git
+   ```
+
+3. goto dormintod directory
+   ```
+   cd dormintod
+   ```
+
+4. install the require library
+   ```
+   python -m pip install -r requirements.txt
+   ```
+
+5. Edit `data.txt`, input you data token in `data.txt`, find you token in [How to Find Account Token](#how-to-find-account-token). One line for one data account, if you want add you second account add in new line!
+
+6. execute the main program 
+   ```
+   python bot.py
+   ```
+
+# Bot.py parameter feature
+
+Here are some parameters to enable feature
+
+| parameter | description                          |
+| --------- | ------------------------------------ |
+| autotask  | to enable feature auto complete task |
+| autogame  | to enable feature auto playing game  |
+
+Example
+
+```shell
+python bot.py autotask autogame
+```
 
 # Play Game Configuration
 
 Edit `config.json` to set your point that your want !
 
+| Key        | Value and description                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------------------ |
+| game_point | low : minimum points earned when playing the game <br><br>high : maximal points earned when playing the game |
 
 # Video Guide to Get Data
 
