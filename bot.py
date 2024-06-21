@@ -4,10 +4,11 @@ import time
 import json
 import random
 import requests
+import argparse
 from json import dumps as dp, loads as ld
 from datetime import datetime
 from colorama import *
-from urllib.parse import unquote
+from urllib.parse import unquote,parse_qs
 from base64 import b64decode
 
 init(autoreset=True)
@@ -191,12 +192,7 @@ class BlumTod:
             continue
 
     def data_parsing(self, data):
-        redata = {}
-        for i in unquote(data).split("&"):
-            key, value = i.split("=")
-            redata[key] = value
-
-        return redata
+        return {k:v[0] for k,v in parse_qs(data).items()}
 
     def log(self, message):
         now = datetime.now().isoformat(" ").split(".")[0]
@@ -309,22 +305,24 @@ class BlumTod:
     
     {hijau}Message : {putih}Dont forget to 'git pull' maybe i update the bot !
         """
-        arg = sys.argv
-        auto_task = False
-        auto_game = False
-        if "noclear" not in arg:
+        arg = argparse.ArgumentParser()
+        arg.add_argument('--marinkitagawa',action="store_true",help="no clear the terminal !")
+        arg.add_argument('--data',help="Custom data input (default: data.txt)",default="data.txt")
+        arg.add_argument('--autotask',action="store_true",help="enable feature auto complete task !")
+        arg.add_argument('--autogame',action='store_true',help="enable feature auto playing game !")
+        args = arg.parse_args()
+        if not args.marinkitagawa:
             os.system("cls" if os.name == "nt" else "clear")
 
-        if "autotask" in arg:
-            auto_task = True
-
-        if "autogame" in arg:
-            auto_game = True
         print(banner)
-        datas = open("data.txt", "r").read().splitlines()
+        if not os.path.exists(args.data):
+            self.log(f'{merah}{args.data} not found, please input valid file name !')
+            sys.exit()
+            
+        datas = open(args.data, "r").read().splitlines()
         self.log(f"{hijau}total account : {putih}{len(datas)}")
         if len(datas) <= 0:
-            self.log(f"{merah}add data account in data.txt first")
+            self.log(f"{merah}add data account in {args.data} first")
             sys.exit()
 
         self.log(self.garis)
@@ -355,7 +353,7 @@ class BlumTod:
                     continue
                 self.checkin(access_token)
                 self.get_friend(access_token)
-                if auto_task:
+                if args.autotask:
                     self.solve_task(access_token)
                 status, res_bal = self.get_balance(access_token)
                 if status:
@@ -364,7 +362,7 @@ class BlumTod:
                 if isinstance(res_bal, str):
                     res_bal = self.start_farming(access_token)
                 list_countdown.append(res_bal)
-                if auto_game:
+                if args.autogame:
                     self.playgame(access_token)
                 self.log(self.garis)
                 self.countdown(self.DEFAULT_INTERVAL)

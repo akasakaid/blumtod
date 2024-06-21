@@ -8,11 +8,11 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 - [Feature](#feature)
 - [Register ?](#register-)
 - [How to Use](#how-to-use)
+  - [Bot.py parameter feature](#botpy-parameter-feature)
   - [Windows](#windows)
   - [Linux](#linux)
   - [Termux](#termux)
 - [Config.json configuration](#configjson-configuration)
-- [Bot.py parameter feature](#botpy-parameter-feature)
 - [Play Game Configuration](#play-game-configuration)
 - [Video Guide to Get Data](#video-guide-to-get-data)
 - [Javascript Command to Get Telegram Data for Desktop](#javascript-command-to-get-telegram-data-for-desktop)
@@ -36,6 +36,16 @@ My referral is full so i dont need referral again, ask u friend for invitation c
 
 # How to Use
 
+## Bot.py parameter feature
+
+Here are some parameters to enable feature
+
+| parameter  | description                                    |
+| ---------- | ---------------------------------------------- |
+| --data     | set custom file data input (default: data.txt) |
+| --autotask | to enable feature auto complete task           |
+| --autogame | to enable feature auto playing game            |
+
 ## Windows 
 
 1. Make sure you computer was installed python and git.
@@ -46,12 +56,12 @@ My referral is full so i dont need referral again, ask u friend for invitation c
 
 2. Clone this repository
    ```shell
-   git clone https://github.com/akasakaid/dormintod.git
+   git clone https://github.com/akasakaid/blumtod.git
    ```
 
-3. goto dormintod directory
+3. goto blumtod directory
    ```
-   cd dormintod
+   cd blumtod
    ```
 
 4. install the require library
@@ -82,13 +92,13 @@ My referral is full so i dont need referral again, ask u friend for invitation c
 2. Clone this repository
    
    ```shell
-   git clone https://github.com/akasakaid/dormintod.git
+   git clone https://github.com/akasakaid/blumtod.git
    ```
 
-3. goto dormintod directory
+3. goto blumtod directory
 
    ```shell
-   cd dormintod
+   cd blumtod
    ```
 
 4. Install the require library
@@ -120,12 +130,12 @@ My referral is full so i dont need referral again, ask u friend for invitation c
 
 2. Clone this repository
    ```shell
-   git clone https://github.com/akasakaid/dormintod.git
+   git clone https://github.com/akasakaid/blumtod.git
    ```
 
-3. goto dormintod directory
+3. goto blumtod directory
    ```
-   cd dormintod
+   cd blumtod
    ```
 
 4. install the require library
@@ -145,15 +155,6 @@ My referral is full so i dont need referral again, ask u friend for invitation c
 | Key      | value & description                                                   |
 | -------- | --------------------------------------------------------------------- |
 | interval | value can be inteter or float <br> interval is delay between accounts |
-
-# Bot.py parameter feature
-
-Here are some parameters to enable feature
-
-| parameter | description                          |
-| --------- | ------------------------------------ |
-| autotask  | to enable feature auto complete task |
-| autogame  | to enable feature auto playing game  |
 
 Example
 
