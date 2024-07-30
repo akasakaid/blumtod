@@ -8,7 +8,7 @@ import argparse
 from json import dumps as dp, loads as ld
 from datetime import datetime
 from colorama import *
-from urllib.parse import unquote,parse_qs
+from urllib.parse import unquote, parse_qs
 from base64 import b64decode
 
 init(autoreset=True)
@@ -94,7 +94,7 @@ class BlumTod:
         headers["Authorization"] = f"Bearer {access_token}"
         res = self.http(url, headers, "")
         balance = res.json()["availableBalance"]
-        self.log(f"{hijau}balance after claim : {balance}")
+        self.log(f"{hijau}balance after claim : {putih}{balance}")
         return
 
     def get_balance(self, access_token, only_show_balance=False):
@@ -178,7 +178,9 @@ class BlumTod:
         self.log(f"{hijau}you have {putih}{play}{hijau} game ticket")
         for i in range(play):
             res = self.http(url_play, headers, "")
-            game_id = res.json()["gameId"]
+            game_id = res.json().get("gameId")
+            if game_id is None:
+                return None
             self.countdown(30)
             point = random.randint(self.MIN_WIN, self.MAX_WIN)
             data = json.dumps({"gameId": game_id, "points": point})
@@ -192,97 +194,79 @@ class BlumTod:
             continue
 
     def data_parsing(self, data):
-        return {k:v[0] for k,v in parse_qs(data).items()}
+        return {k: v[0] for k, v in parse_qs(data).items()}
 
     def log(self, message):
         now = datetime.now().isoformat(" ").split(".")[0]
         print(f"{hitam}[{now}]{reset} {message}")
-    
-    def get_local_token(self,userid):
-        if not os.path.exists('tokens.json'):
-            open("tokens.json","w").write(json.dumps({}))
-        tokens = json.loads(open("tokens.json","r").read())
+
+    def get_local_token(self, userid):
+        if not os.path.exists("tokens.json"):
+            open("tokens.json", "w").write(json.dumps({}))
+        tokens = json.loads(open("tokens.json", "r").read())
         if str(userid) not in tokens.keys():
             return False
-        
-        return tokens[str(userid)]
-    
-    def save_local_token(self,userid,token):
-        tokens = json.loads(open("tokens.json","r").read())
-        tokens[str(userid)] = token
-        open("tokens.json","w").write(json.dumps(tokens,indent=4))
 
-    def is_expired(self,token):
-        header,payload,sign = token.split(".")
+        return tokens[str(userid)]
+
+    def save_local_token(self, userid, token):
+        tokens = json.loads(open("tokens.json", "r").read())
+        tokens[str(userid)] = token
+        open("tokens.json", "w").write(json.dumps(tokens, indent=4))
+
+    def is_expired(self, token):
+        header, payload, sign = token.split(".")
         payload = b64decode(payload + "==").decode()
         jload = json.loads(payload)
         now = round(datetime.now().timestamp())
-        exp = jload['exp']
+        exp = jload["exp"]
         if now > exp:
             return True
-        
+
         return False
-    
-    def save_failed_token(self,userid,data):
+
+    def save_failed_token(self, userid, data):
         file = "auth_failed.json"
         if not os.path.exists(file):
-            open(file,"w").write(json.dumps({}))
-        
-        acc = json.loads(open(file,'r').read())
+            open(file, "w").write(json.dumps({}))
+
+        acc = json.loads(open(file, "r").read())
         if str(userid) in acc.keys():
             return
-        
+
         acc[str(userid)] = data
-        open(file,'w').write(json.dumps(acc,indent=4))
-    
+        open(file, "w").write(json.dumps(acc, indent=4))
+
     def load_config(self):
-        config = json.loads(open('config.json','r').read())
-        self.DEFAULT_INTERVAL = config['interval']
-        self.MIN_WIN = config['game_point']['low']
-        self.MAX_WIN = config['game_point']['high']
+        config = json.loads(open("config.json", "r").read())
+        self.AUTOTASK = config["auto_complete_task"]
+        self.AUTOGAME = config["auto_play_game"]
+        self.DEFAULT_INTERVAL = config["interval"]
+        self.MIN_WIN = config["game_point"]["low"]
+        self.MAX_WIN = config["game_point"]["high"]
         if self.MIN_WIN > self.MAX_WIN:
             self.log(f"{kuning}high value must be higher than lower value")
             sys.exit()
-            
+
     def http(self, url, headers, data=None):
         while True:
             try:
                 if data is None:
-                    headers["content-length"] = "0"
                     res = requests.get(url, headers=headers, timeout=30)
-                    open("http.log", "a", encoding="utf-8").write(res.text + "\n")
-                    if "<html>" in res.text:
-                        self.log(f'{merah}failed fetch json response !')
-                        time.sleep(2)
-                        continue
-
-                    return res
-
-                if data == "":
+                elif data == "":
                     res = requests.post(url, headers=headers, timeout=30)
-                    open("http.log", "a", encoding="utf-8").write(res.text + "\n")
-                    if "<html>" in res.text:
-                        self.log(f'{merah}failed fetch json response !')
-                        time.sleep(2)
-                        continue
-
-                    return res
-
-                res = requests.post(url, headers=headers, data=data, timeout=30)
+                else:
+                    res = requests.post(url, headers=headers, data=data, timeout=30)
                 open("http.log", "a", encoding="utf-8").write(res.text + "\n")
                 if "<html>" in res.text:
-                    self.log(f'{merah}failed fetch json response !')
+                    self.log(f"{merah}failed fetch json response !")
                     time.sleep(2)
                     continue
 
                 return res
 
-            except (
-                requests.exceptions.ConnectionError,
-                requests.exceptions.ConnectTimeout,
-                requests.exceptions.ReadTimeout,
-            ):
-                self.log(f"{merah}connection error")
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+                self.log(f"{merah}connection error/ connection timeout !")
 
     def countdown(self, t):
         while t:
@@ -306,33 +290,35 @@ class BlumTod:
     {hijau}Message : {putih}Dont forget to 'git pull' maybe i update the bot !
         """
         arg = argparse.ArgumentParser()
-        arg.add_argument('--marinkitagawa',action="store_true",help="no clear the terminal !")
-        arg.add_argument('--data',help="Custom data input (default: data.txt)",default="data.txt")
-        arg.add_argument('--autotask',action="store_true",help="enable feature auto complete task !")
-        arg.add_argument('--autogame',action='store_true',help="enable feature auto playing game !")
+        arg.add_argument(
+            "--marinkitagawa", action="store_true", help="no clear the terminal !"
+        )
+        arg.add_argument(
+            "--data", help="Custom data input (default: data.txt)", default="data.txt"
+        )
         args = arg.parse_args()
         if not args.marinkitagawa:
             os.system("cls" if os.name == "nt" else "clear")
 
         print(banner)
         if not os.path.exists(args.data):
-            self.log(f'{merah}{args.data} not found, please input valid file name !')
+            self.log(f"{merah}{args.data} not found, please input valid file name !")
             sys.exit()
-            
-        datas = open(args.data, "r").read().splitlines()
+
+        datas = [i for i in open(args.data, "r").read().splitlines() if len(i) > 0]
         self.log(f"{hijau}total account : {putih}{len(datas)}")
         if len(datas) <= 0:
             self.log(f"{merah}add data account in {args.data} first")
             sys.exit()
 
-        self.log(self.garis)
+        print(self.garis)
         while True:
             list_countdown = []
             for no, data in enumerate(datas):
                 self.log(f"{hijau}account number - {putih}{no + 1}")
                 data_parse = self.data_parsing(data)
                 user = json.loads(data_parse["user"])
-                userid = user['id']
+                userid = user["id"]
                 self.log(f"{hijau}login as : {putih}{user['first_name']}")
                 access_token = self.get_local_token(userid)
                 failed_fetch_token = False
@@ -340,10 +326,10 @@ class BlumTod:
                     if access_token is False:
                         access_token = self.renew_access_token(data)
                         if access_token is False:
-                            self.save_failed_token(userid,data)
+                            self.save_failed_token(userid, data)
                             failed_fetch_token = True
                             break
-                        self.save_local_token(userid,access_token)
+                        self.save_local_token(userid, access_token)
                     expired = self.is_expired(access_token)
                     if expired:
                         access_token = False
@@ -353,7 +339,7 @@ class BlumTod:
                     continue
                 self.checkin(access_token)
                 self.get_friend(access_token)
-                if args.autotask:
+                if self.AUTOTASK:
                     self.solve_task(access_token)
                 status, res_bal = self.get_balance(access_token)
                 if status:
@@ -362,9 +348,9 @@ class BlumTod:
                 if isinstance(res_bal, str):
                     res_bal = self.start_farming(access_token)
                 list_countdown.append(res_bal)
-                if args.autogame:
+                if self.AUTOGAME:
                     self.playgame(access_token)
-                self.log(self.garis)
+                print(self.garis)
                 self.countdown(self.DEFAULT_INTERVAL)
             min_countdown = min(list_countdown)
             now = int(time.time())
