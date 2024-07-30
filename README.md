@@ -9,16 +9,15 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 - [Register ?](#register-)
 - [How to Use](#how-to-use)
   - [Bot.py parameter feature](#botpy-parameter-feature)
+  - [About Config.json](#about-configjson)
   - [Windows](#windows)
   - [Linux](#linux)
   - [Termux](#termux)
-- [Config.json configuration](#configjson-configuration)
-- [Play Game Configuration](#play-game-configuration)
 - [Video Guide to Get Data](#video-guide-to-get-data)
 - [Javascript Command to Get Telegram Data for Desktop](#javascript-command-to-get-telegram-data-for-desktop)
 - [Run for 24/7](#run-for-247)
 - [Discussion](#discussion)
-- [Support](#support)
+- [Support My Work](#support-my-work)
 - [Thank you \< 3](#thank-you--3)
 
 # Feature
@@ -27,8 +26,8 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 - [x] Auto Claim Daily
 - [x] Support Multi Account
 - [x] Auto Claim Bonus Referral
-- [x] Auto Complete Task, see [Bot.py parameter feature](#botpy-parameter-feature)
-- [x] Auto Play Game (random input from user), see [Play Game Configuration](#play-game-configuration)
+- [x] Auto Complete Task, see [About Config.json](#about-configjson)
+- [x] Auto Play Game (random input from user), see [About Config.json](#about-configjson)
 
 # Register ?
 
@@ -40,11 +39,19 @@ My referral is full so i dont need referral again, ask u friend for invitation c
 
 Here are some parameters to enable feature
 
-| parameter  | description                                    |
-| ---------- | ---------------------------------------------- |
-| --data     | set custom file data input (default: data.txt) |
-| --autotask | to enable feature auto complete task           |
-| --autogame | to enable feature auto playing game            |
+| parameter | description                                    |
+| --------- | ---------------------------------------------- |
+| --data    | set custom file data input (default: data.txt) |
+
+## About Config.json
+
+Here Config.json Description
+| key                | description                                                                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| interval           | value type is integer/real number <br> interval is delay between accounts                                                                         |
+| auto_complete_task | value type is bool (true/false), enable (true) to active auto complete task                                                                       |
+| auto_play_game     | value type is bool (true/false), enable (true) to active auto play game                                                                           |
+| game_point         | value type is integer/real number<br>low : minimum points earned when playing the game <br><br>high : maximal points earned when playing the game |
 
 ## Windows 
 
@@ -150,26 +157,6 @@ Here are some parameters to enable feature
    python bot.py
    ```
 
-# Config.json configuration
-
-| Key      | value & description                                                   |
-| -------- | --------------------------------------------------------------------- |
-| interval | value can be inteter or float <br> interval is delay between accounts |
-
-Example
-
-```shell
-python bot.py autotask autogame
-```
-
-# Play Game Configuration
-
-Edit `config.json` to set your point that your want !
-
-| Key        | Value and description                                                                                        |
-| ---------- | ------------------------------------------------------------------------------------------------------------ |
-| game_point | low : minimum points earned when playing the game <br><br>high : maximal points earned when playing the game |
-
 # Video Guide to Get Data
 
 The require data is same like [pixelversebot](https://github.com/akasakaid/pixelversebot) so you can watch same tutorial / video guide to get data !
@@ -190,11 +177,12 @@ You can run the script bot for 24/7 using vps / rdp. You can use `screen` applic
 
 If you have an question or something you can ask in here : [@sdsproject_chat](https://t.me/sdsproject_chat)
 
-# Support
+# Support My Work
 
 To support me you can buy me a coffee via website in below
 
-- https://trakteer.id/fawwazthoerif/tip
-- https://sociabuzz.com/fawwazthoerif/tribe
+- [Indonesian] https://s.id/nusanqr (QRIS)
+- [Indonesian] https://trakteer.id/fawwazthoerif/tip
+- [Global] https://sociabuzz.com/fawwazthoerif/tribe
 
 # Thank you < 3
