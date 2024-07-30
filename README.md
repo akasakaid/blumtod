@@ -31,7 +31,7 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 
 # Register ?
 
-My referral is full so i dont need referral again, ask u friend for invitation code !
+Click the following url to register : [https://t.me/BlumCryptoBot/app?startapp=ref_aPYIYj1oKc](https://t.me/BlumCryptoBot/app?startapp=ref_aPYIYj1oKc)
 
 # How to Use
 
