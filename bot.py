@@ -62,31 +62,37 @@ class BlumTod:
         headers = self.base_headers.copy()
         headers["Authorization"] = f"Bearer {access_token}"
         res = self.http(url_task, headers)
-        for task in res.json():
-            task_id = task["id"]
-            task_title = task["title"]
-            task_status = task["status"]
-            if task_status == "NOT_STARTED":
-                url_start = (
-                    f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/start"
-                )
-                res = self.http(url_start, headers, "")
-                if "message" in res.text:
-                    continue
+        for tasks in res.json():
+            for task in tasks.get("tasks"):
+                task_id = task["id"]
+                task_title = task["title"]
+                task_status = task["status"]
+                if task_status == "NOT_STARTED":
+                    url_start = (
+                        f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/start"
+                    )
+                    res = self.http(url_start, headers, "")
+                    if "message" in res.text:
+                        continue
 
-                url_claim = (
-                    f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/claim"
-                )
-                res = self.http(url_claim, headers, "")
-                if "message" in res.text:
-                    continue
+                    url_claim = (
+                        f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/claim"
+                    )
+                    res = self.http(url_claim, headers, "")
+                    if "message" in res.text:
+                        continue
 
-                status = res.json()["status"]
-                if status == "CLAIMED":
-                    self.log(f"{hijau}success complete task {task_title} !")
-                    continue
+                    status = res.json()["status"]
+                    if status == "CLAIMED":
+                        self.log(f"{hijau}success complete task {task_title} !")
+                        continue
 
-            self.log(f"{kuning}already complete task {task_title} !")
+                self.log(f"{kuning}already complete task {task_title} !")
+
+    def set_proxy(self, proxy=None):
+        self.ses = requests.Session()
+        if proxy is not None:
+            self.ses.proxies.update({"http": proxy, "https": proxy})
 
     def claim_farming(self, access_token):
         url = "https://game-domain.blum.codes/api/v1/farming/claim"
@@ -248,15 +254,30 @@ class BlumTod:
             self.log(f"{kuning}high value must be higher than lower value")
             sys.exit()
 
+    def ipinfo(self):
+        res = self.http("https://ipinfo.io/json", {"content-type": "application/json"})
+        if res is False:
+            return False
+        if res.status_code != 200:
+            self.log(f"{merah}failed fetch ipinfo !")
+            return False
+        city = res.json().get("city")
+        country = res.json().get("country")
+        region = res.json().get("region")
+        self.log(
+            f"{hijau}country : {putih}{country} {hijau}region : {putih}{region} {hijau}city : {putih}{city}"
+        )
+        return True
+
     def http(self, url, headers, data=None):
         while True:
             try:
                 if data is None:
-                    res = requests.get(url, headers=headers, timeout=30)
+                    res = self.ses.get(url, headers=headers, timeout=30)
                 elif data == "":
-                    res = requests.post(url, headers=headers, timeout=30)
+                    res = self.ses.post(url, headers=headers, timeout=30)
                 else:
-                    res = requests.post(url, headers=headers, data=data, timeout=30)
+                    res = self.ses.post(url, headers=headers, data=data, timeout=30)
                 open("http.log", "a", encoding="utf-8").write(res.text + "\n")
                 if "<html>" in res.text:
                     self.log(f"{merah}failed fetch json response !")
@@ -267,6 +288,10 @@ class BlumTod:
 
             except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
                 self.log(f"{merah}connection error/ connection timeout !")
+
+            except requests.exceptions.ProxyError:
+                self.log(f"{merah}bad proxy")
+                return False
 
     def countdown(self, t):
         while t:
@@ -296,6 +321,11 @@ class BlumTod:
         arg.add_argument(
             "--data", help="Custom data input (default: data.txt)", default="data.txt"
         )
+        arg.add_argument(
+            "--proxy",
+            help="custom proxy file input (default: proxies.txt)",
+            default="proxies.txt",
+        )
         args = arg.parse_args()
         if not args.marinkitagawa:
             os.system("cls" if os.name == "nt" else "clear")
@@ -306,11 +336,13 @@ class BlumTod:
             sys.exit()
 
         datas = [i for i in open(args.data, "r").read().splitlines() if len(i) > 0]
+        proxies = [i for i in open(args.proxy).read().splitlines() if len(i) > 0]
+        use_proxy = True if len(proxies) > 0 else False
         self.log(f"{hijau}total account : {putih}{len(datas)}")
+        self.log(f"{biru}use proxy : {putih}{use_proxy}")
         if len(datas) <= 0:
             self.log(f"{merah}add data account in {args.data} first")
             sys.exit()
-
         print(self.garis)
         while True:
             list_countdown = []
@@ -320,6 +352,10 @@ class BlumTod:
                 user = json.loads(data_parse["user"])
                 userid = user["id"]
                 self.log(f"{hijau}login as : {putih}{user['first_name']}")
+                if use_proxy:
+                    proxy = proxies[no % len(proxies)]
+                self.set_proxy(proxy if use_proxy else None)
+                self.ipinfo() if use_proxy else None
                 access_token = self.get_local_token(userid)
                 failed_fetch_token = False
                 while True:
