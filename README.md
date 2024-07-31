@@ -10,6 +10,7 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 - [How to Use](#how-to-use)
   - [Bot.py parameter feature](#botpy-parameter-feature)
   - [About Config.json](#about-configjson)
+  - [About Proxy](#about-proxy)
   - [Windows](#windows)
   - [Linux](#linux)
   - [Termux](#termux)
@@ -18,12 +19,14 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 - [Run for 24/7](#run-for-247)
 - [Discussion](#discussion)
 - [Support My Work](#support-my-work)
+- [QnA](#qna)
 - [Thank you \< 3](#thank-you--3)
 
 # Feature
 
 - [x] Auto Claim
 - [x] Auto Claim Daily
+- [x] Proxy Support, see [About Proxy](#about-proxy)
 - [x] Support Multi Account
 - [x] Auto Claim Bonus Referral
 - [x] Auto Complete Task, see [About Config.json](#about-configjson)
@@ -52,6 +55,28 @@ Here Config.json Description
 | auto_complete_task | value type is bool (true/false), enable (true) to active auto complete task                                                                       |
 | auto_play_game     | value type is bool (true/false), enable (true) to active auto play game                                                                           |
 | game_point         | value type is integer/real number<br>low : minimum points earned when playing the game <br><br>high : maximal points earned when playing the game |
+
+## About Proxy
+
+Register on this site to get free proxy : [Here](https://www.webshare.io/?referral_code=dwj0m9cdi4mp)
+
+You can add your proxy list in `proxies.txt` and proxy format is like example below :
+
+Format :
+
+```
+http://host:port
+http://user:pass@host:port
+```
+
+Example :
+
+```
+http://127.0.0.1:6969
+http://user:pass@127.0.0.1:6969
+socks5://127.0.0.1:6969
+socks5://user:pass@127.0.0.1:6969
+```
 
 ## Windows 
 
@@ -184,5 +209,16 @@ To support me you can buy me a coffee via website in below
 - [Indonesian] https://s.id/nusanqr (QRIS)
 - [Indonesian] https://trakteer.id/fawwazthoerif/tip
 - [Global] https://sociabuzz.com/fawwazthoerif/tribe
+
+# QnA
+
+Q : Is this bot/program script required to use a proxy?
+
+A : No, this bot/program script is not required to use a proxy.
+
+Q : How can I use a proxy?
+
+A : Simply fill in the proxies.txt file according to the format I have explained.
+
 
 # Thank you < 3
