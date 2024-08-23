@@ -1,10 +1,13 @@
 # Blumtod
 
-AUTO CLAIM FOR BLUM / @BlumCryptoBot
+AUTO CLAIM FOR BLUM / @blum
+
+[Click to read the readme in Indonesian](README_ID.md)
 
 # Table of Contents
 - [Blumtod](#blumtod)
 - [Table of Contents](#table-of-contents)
+- [Warning](#warning)
 - [Feature](#feature)
 - [Register ?](#register-)
 - [How to Use](#how-to-use)
@@ -21,6 +24,10 @@ AUTO CLAIM FOR BLUM / @BlumCryptoBot
 - [Support My Work](#support-my-work)
 - [QnA](#qna)
 - [Thank you \< 3](#thank-you--3)
+
+# Warning
+
+All risks are borne by the user
 
 # Feature
 
@@ -82,6 +89,8 @@ socks5://user:pass@127.0.0.1:6969
 
 1. Make sure you computer was installed python and git.
    
+   Suggestion: Use python version 3.8+ (3.8 and above or latest)
+
    python site : [https://python.org](https://python.org)
    
    git site : [https://git-scm.com/](https://git-scm.com/)
@@ -112,6 +121,8 @@ socks5://user:pass@127.0.0.1:6969
 
 1. Make sure you computer was installed python and git.
    
+   Suggestion: Use python version 3.8+ (3.8 and above or latest)
+
    python
    ```shell
    sudo apt install python3 python3-pip
