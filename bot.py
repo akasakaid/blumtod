@@ -183,9 +183,14 @@ class BlumTod:
         play = res.json()["playPasses"]
         self.log(f"{hijau}you have {putih}{play}{hijau} game ticket")
         for i in range(play):
+            if self.is_expired(access_token):
+                return True
             res = self.http(url_play, headers, "")
             game_id = res.json().get("gameId")
             if game_id is None:
+                message = res.json().get("message","")
+                if message == "cannot start game":
+                    continue
                 return None
             self.countdown(30)
             point = random.randint(self.MIN_WIN, self.MAX_WIN)
@@ -224,7 +229,7 @@ class BlumTod:
         header, payload, sign = token.split(".")
         payload = b64decode(payload + "==").decode()
         jload = json.loads(payload)
-        now = round(datetime.now().timestamp())
+        now = round(datetime.now().timestamp()) + 300
         exp = jload["exp"]
         if now > exp:
             return True
@@ -385,7 +390,13 @@ class BlumTod:
                     res_bal = self.start_farming(access_token)
                 list_countdown.append(res_bal)
                 if self.AUTOGAME:
-                    self.playgame(access_token)
+                    while True:
+                        result = self.playgame(access_token)
+                        if result:
+                            access_token = self.renew_access_token(data)
+                            self.save_local_token(userid, access_token)
+                            continue
+                        break
                 print(self.garis)
                 self.countdown(self.DEFAULT_INTERVAL)
             min_countdown = min(list_countdown)
