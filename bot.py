@@ -49,7 +49,8 @@ class BlumTod:
         headers["Content-Length"] = str(len(data))
         url = "https://gateway.blum.codes/v1/auth/provider/PROVIDER_TELEGRAM_MINI_APP"
         res = self.http(url, headers, data)
-        if "token" not in res.json().keys():
+        token = res.json().get("token")
+        if token is None:
             self.log(f"{merah}'token' is not found in response, check you data !!")
             return False
 
@@ -141,17 +142,16 @@ class BlumTod:
         headers = self.base_headers.copy()
         headers["Authorization"] = f"Bearer {access_token}"
         res = self.http(url, headers)
-        can_claim = res.json()["canClaim"]
-        limit_invite = res.json()["limitInvitation"]
-        amount_claim = res.json()["amountForClaim"]
-        ref_code = res.json()["referralToken"]
+        can_claim = res.json().get("canClaim", False)
+        limit_invite = res.json().get("limitInvitation", 0)
+        amount_claim = res.json().get("amountForClaim")
         self.log(f"{putih}limit invitation : {hijau}{limit_invite}")
         self.log(f"{hijau}claim amount : {putih}{amount_claim}")
         self.log(f"{putih}can claim : {hijau}{can_claim}")
         if can_claim:
             url_claim = "https://gateway.blum.codes/v1/friends/claim"
             res = self.http(url_claim, headers, "")
-            if "claimBalance" in res.json().keys():
+            if res.json().get("claimBalance") is not None:
                 self.log(f"{hijau}success claim referral bonus !")
                 return
             self.log(f"{merah}failed claim referral bonus !")
@@ -188,9 +188,10 @@ class BlumTod:
             res = self.http(url_play, headers, "")
             game_id = res.json().get("gameId")
             if game_id is None:
-                message = res.json().get("message","")
+                message = res.json().get("message", "")
                 if message == "cannot start game":
                     continue
+                self.log(f"{kuning}{message}")
                 return None
             self.countdown(30)
             point = random.randint(self.MIN_WIN, self.MAX_WIN)
@@ -277,6 +278,12 @@ class BlumTod:
     def http(self, url, headers, data=None):
         while True:
             try:
+                logfile = "http.log"
+                if not os.path.exists(logfile):
+                    open(logfile, "a")
+                logsize = os.path.getsize(logfile)
+                if (logsize > (1024 * 2)) > 1:
+                    open(logfile, "w").write("")
                 if data is None:
                     res = self.ses.get(url, headers=headers, timeout=30)
                 elif data == "":
@@ -284,7 +291,7 @@ class BlumTod:
                 else:
                     res = self.ses.post(url, headers=headers, data=data, timeout=30)
                 open("http.log", "a", encoding="utf-8").write(res.text + "\n")
-                if "<html>" in res.text:
+                if "<title>" in res.text:
                     self.log(f"{merah}failed fetch json response !")
                     time.sleep(2)
                     continue
