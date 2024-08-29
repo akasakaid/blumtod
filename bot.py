@@ -64,6 +64,9 @@ class BlumTod:
         headers["Authorization"] = f"Bearer {access_token}"
         res = self.http(url_task, headers)
         for tasks in res.json():
+            if isinstance(tasks,str):
+                self.log(f'{kuning}failed get task list !')
+                return
             for task in tasks.get("tasks"):
                 # print(task)
                 task_id = task.get("id")
