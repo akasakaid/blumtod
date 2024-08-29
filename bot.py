@@ -65,9 +65,10 @@ class BlumTod:
         res = self.http(url_task, headers)
         for tasks in res.json():
             for task in tasks.get("tasks"):
-                task_id = task["id"]
-                task_title = task["title"]
-                task_status = task["status"]
+                # print(task)
+                task_id = task.get("id")
+                task_title = task.get("title")
+                task_status = task.get("status")
                 if task_status == "NOT_STARTED":
                     url_start = (
                         f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/start"
@@ -83,7 +84,7 @@ class BlumTod:
                     if "message" in res.text:
                         continue
 
-                    status = res.json()["status"]
+                    status = res.json().get("status")
                     if status == "CLAIMED":
                         self.log(f"{hijau}success complete task {task_title} !")
                         continue
