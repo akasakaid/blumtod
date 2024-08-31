@@ -210,15 +210,16 @@ class BlumTod:
                     point = random.randint(self.MIN_WIN, self.MAX_WIN)
                     data = json.dumps({"gameId": game_id, "points": point})
                     res = self.http(url_claim, headers, data)
-                    message = res.json().get("message", "")
-                    if message == "game session not finished":
-                        continue
                     if "OK" in res.text:
                         self.log(
                             f"{hijau}success earn {putih}{point}{hijau} from game !"
                         )
                         self.get_balance(access_token, only_show_balance=True)
                         break
+                    
+                    message = res.json().get("message", "")
+                    if message == "game session not finished":
+                        continue
 
                     self.log(f"{merah}failed earn {putih}{point}{merah} from game !")
                     break
