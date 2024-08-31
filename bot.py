@@ -20,6 +20,7 @@ kuning = Fore.LIGHTYELLOW_EX
 biru = Fore.LIGHTBLUE_EX
 reset = Style.RESET_ALL
 hitam = Fore.LIGHTBLACK_EX
+magenta = Fore.LIGHTMAGENTA_EX
 
 
 class BlumTod:
@@ -64,8 +65,8 @@ class BlumTod:
         headers["Authorization"] = f"Bearer {access_token}"
         res = self.http(url_task, headers)
         for tasks in res.json():
-            if isinstance(tasks,str):
-                self.log(f'{kuning}failed get task list !')
+            if isinstance(tasks, str):
+                self.log(f"{kuning}failed get task list !")
                 return
             for task in tasks.get("tasks"):
                 # print(task)
@@ -89,10 +90,10 @@ class BlumTod:
 
                     status = res.json().get("status")
                     if status == "CLAIMED":
-                        self.log(f"{hijau}success complete task {task_title} !")
+                        self.log(f"{hijau}success complete task id {task_id} !")
                         continue
 
-                self.log(f"{kuning}already complete task {task_title} !")
+                self.log(f"{kuning}already complete task id {task_id} !")
 
     def set_proxy(self, proxy=None):
         self.ses = requests.Session()
@@ -104,7 +105,7 @@ class BlumTod:
         headers = self.base_headers.copy()
         headers["Authorization"] = f"Bearer {access_token}"
         res = self.http(url, headers, "")
-        balance = res.json()["availableBalance"]
+        balance = res.json().get("availableBalance", 0)
         self.log(f"{hijau}balance after claim : {putih}{balance}")
         return
 
@@ -113,7 +114,7 @@ class BlumTod:
         headers = self.base_headers.copy()
         headers["Authorization"] = f"Bearer {access_token}"
         res = self.http(url, headers)
-        balance = res.json()["availableBalance"]
+        balance = res.json().get("availableBalance", 0)
         self.log(f"{hijau}balance : {putih}{balance}")
         if only_show_balance:
             return
@@ -150,8 +151,8 @@ class BlumTod:
         limit_invite = res.json().get("limitInvitation", 0)
         amount_claim = res.json().get("amountForClaim")
         self.log(f"{putih}limit invitation : {hijau}{limit_invite}")
-        self.log(f"{hijau}claim amount : {putih}{amount_claim}")
-        self.log(f"{putih}can claim : {hijau}{can_claim}")
+        self.log(f"{hijau}referral balance : {putih}{amount_claim}")
+        self.log(f"{putih}can claim referral : {hijau}{can_claim}")
         if can_claim:
             url_claim = "https://gateway.blum.codes/v1/friends/claim"
             res = self.http(url_claim, headers, "")
@@ -183,31 +184,44 @@ class BlumTod:
         url_balance = "https://game-domain.blum.codes/api/v1/user/balance"
         headers = self.base_headers.copy()
         headers["Authorization"] = f"Bearer {access_token}"
-        res = self.http(url_balance, headers)
-        play = res.json()["playPasses"]
-        self.log(f"{hijau}you have {putih}{play}{hijau} game ticket")
-        for i in range(play):
-            if self.is_expired(access_token):
-                return True
-            res = self.http(url_play, headers, "")
-            game_id = res.json().get("gameId")
-            if game_id is None:
-                message = res.json().get("message", "")
-                if message == "cannot start game":
-                    continue
-                self.log(f"{kuning}{message}")
-                return None
-            self.countdown(30)
-            point = random.randint(self.MIN_WIN, self.MAX_WIN)
-            data = json.dumps({"gameId": game_id, "points": point})
-            res = self.http(url_claim, headers, data)
-            if "OK" in res.text:
-                self.log(f"{hijau}success earn {putih}{point}{hijau} from game !")
-                self.get_balance(access_token, only_show_balance=True)
-                continue
+        while True:
+            res = self.http(url_balance, headers)
+            play = res.json().get("playPasses")
+            if play is None:
+                self.log(f"{kuning}failed get game ticket !")
+                break
+            self.log(f"{hijau}you have {putih}{play}{hijau} game ticket")
+            if play <= 0:
+                return
+            for i in range(play):
+                if self.is_expired(access_token):
+                    return True
+                res = self.http(url_play, headers, "")
+                game_id = res.json().get("gameId")
+                if game_id is None:
+                    message = res.json().get("message", "")
+                    if message == "cannot start game":
+                        self.log(f"{kuning}cannot start game !")
+                        continue
+                    self.log(f"{kuning}{message}")
+                    return None
+                while True:
+                    self.countdown(30)
+                    point = random.randint(self.MIN_WIN, self.MAX_WIN)
+                    data = json.dumps({"gameId": game_id, "points": point})
+                    res = self.http(url_claim, headers, data)
+                    message = res.json().get("message", "")
+                    if message == "game session not finished":
+                        continue
+                    if "OK" in res.text:
+                        self.log(
+                            f"{hijau}success earn {putih}{point}{hijau} from game !"
+                        )
+                        self.get_balance(access_token, only_show_balance=True)
+                        break
 
-            self.log(f"{merah}failed earn {putih}{point}{merah} from game !")
-            continue
+                    self.log(f"{merah}failed earn {putih}{point}{merah} from game !")
+                    break
 
     def data_parsing(self, data):
         return {k: v[0] for k, v in parse_qs(data).items()}
@@ -254,14 +268,18 @@ class BlumTod:
         open(file, "w").write(json.dumps(acc, indent=4))
 
     def load_config(self):
-        config = json.loads(open("config.json", "r").read())
-        self.AUTOTASK = config["auto_complete_task"]
-        self.AUTOGAME = config["auto_play_game"]
-        self.DEFAULT_INTERVAL = config["interval"]
-        self.MIN_WIN = config["game_point"]["low"]
-        self.MAX_WIN = config["game_point"]["high"]
-        if self.MIN_WIN > self.MAX_WIN:
-            self.log(f"{kuning}high value must be higher than lower value")
+        try:
+            config = json.loads(open("config.json", "r").read())
+            self.AUTOTASK = config["auto_complete_task"]
+            self.AUTOGAME = config["auto_play_game"]
+            self.DEFAULT_INTERVAL = config["interval"]
+            self.MIN_WIN = config["game_point"]["low"]
+            self.MAX_WIN = config["game_point"]["high"]
+            if self.MIN_WIN > self.MAX_WIN:
+                self.log(f"{kuning}high value must be higher than lower value")
+                sys.exit()
+        except json.decoder.JSONDecodeError:
+            self.log(f"{merah}failed decode config.json")
             sys.exit()
 
     def ipinfo(self):
@@ -286,7 +304,7 @@ class BlumTod:
                 if not os.path.exists(logfile):
                     open(logfile, "a")
                 logsize = os.path.getsize(logfile)
-                if (logsize > (1024 * 2)) > 1:
+                if (logsize / (1024 * 2)) > 1:
                     open(logfile, "w").write("")
                 if data is None:
                     res = self.ses.get(url, headers=headers, timeout=30)
@@ -294,7 +312,7 @@ class BlumTod:
                     res = self.ses.post(url, headers=headers, timeout=30)
                 else:
                     res = self.ses.post(url, headers=headers, data=data, timeout=30)
-                open("http.log", "a", encoding="utf-8").write(res.text + "\n")
+                open(logfile, "a", encoding="utf-8").write(res.text + "\n")
                 if "<title>" in res.text:
                     self.log(f"{merah}failed fetch json response !")
                     time.sleep(2)
@@ -323,12 +341,10 @@ class BlumTod:
 
     def main(self):
         banner = f"""
-    {hijau}AUTO CLAIM FOR {putih}BLUM {hijau}/ {biru}@BlumCryptoBot
-    
-    {hijau}By : {putih}t.me/AkasakaID
-    {putih}Github : {hijau}@AkasakaID
-    
-    {hijau}Message : {putih}Dont forget to 'git pull' maybe i update the bot !
+{magenta}┏┓┳┓┏┓  ┏┓    •      {putih}BlumTod Auto Claim for {hijau}blum
+{magenta}┗┓┃┃┗┓  ┃┃┏┓┏┓┓┏┓┏╋  {hijau}Author : {putih}AkasakaID
+{magenta}┗┛┻┛┗┛  ┣┛┛ ┗┛┃┗ ┗┗  {putih}Github : {hijau}https://github.com/AkasakaID
+{magenta}              ┛      {hijau}Note : {putih}Every Action Has a Consequence
         """
         arg = argparse.ArgumentParser()
         arg.add_argument(
