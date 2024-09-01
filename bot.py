@@ -220,6 +220,7 @@ class BlumTod:
                         self.log(
                             f"{kuning}{message},will be tried again in the next round."
                         )
+                        return False
                     self.log(f"{kuning}{message}")
                     continue
                 while True:
