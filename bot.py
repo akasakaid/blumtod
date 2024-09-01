@@ -53,9 +53,9 @@ class BlumTod:
         token = res.json().get("token")
         if token is None:
             self.log(f"{merah}'token' is not found in response, check you data !!")
-            return False
+            return 0
 
-        access_token = res.json()["token"]["access"]
+        access_token = token.get("access")
         self.log(f"{hijau}success get access token ")
         return access_token
 
@@ -113,15 +113,25 @@ class BlumTod:
         url = "https://game-domain.blum.codes/api/v1/user/balance"
         headers = self.base_headers.copy()
         headers["Authorization"] = f"Bearer {access_token}"
-        res = self.http(url, headers)
-        balance = res.json().get("availableBalance", 0)
-        self.log(f"{hijau}balance : {putih}{balance}")
-        if only_show_balance:
-            return
-        timestamp = round(res.json()["timestamp"] / 1000)
-        if "farming" not in res.json().keys():
-            return False, "not_started"
-        end_farming = round(res.json()["farming"]["endTime"] / 1000)
+        while True:
+            res = self.http(url, headers)
+            balance = res.json().get("availableBalance", 0)
+            self.log(f"{hijau}balance : {putih}{balance}")
+            if only_show_balance:
+                return
+            timestamp = res.json().get("timestamp")
+            if timestamp is None:
+                self.countdown(3)
+                continue
+            timestamp = round(timestamp / 1000)
+            if "farming" not in res.json().keys():
+                return False, "not_started"
+            end_farming = res.json().get("farming", {}).get("endTime")
+            if end_farming is None:
+                self.countdown(3)
+                continue
+            break
+        end_farming = round(end_farming / 1000)
         if timestamp > end_farming:
             self.log(f"{hijau}now is time to claim farming !")
             return True, end_farming
@@ -135,8 +145,14 @@ class BlumTod:
         url = "https://game-domain.blum.codes/api/v1/farming/start"
         headers = self.base_headers.copy()
         headers["Authorization"] = f"Bearer {access_token}"
-        res = self.http(url, headers, "")
-        end = res.json()["endTime"]
+        while True:
+            res = self.http(url, headers, "")
+            end = res.json().get("endTime")
+            if end is None:
+                self.countdown(3)
+                continue
+            break
+
         end_date = datetime.fromtimestamp(end / 1000)
         self.log(f"{hijau}start farming successfully !")
         self.log(f"{hijau}end farming : {putih}{end_date}")
@@ -201,10 +217,11 @@ class BlumTod:
                 if game_id is None:
                     message = res.json().get("message", "")
                     if message == "cannot start game":
-                        self.log(f"{kuning}cannot start game !")
-                        continue
+                        self.log(
+                            f"{kuning}{message},will be tried again in the next round."
+                        )
                     self.log(f"{kuning}{message}")
-                    return None
+                    continue
                 while True:
                     self.countdown(30)
                     point = random.randint(self.MIN_WIN, self.MAX_WIN)
@@ -216,7 +233,7 @@ class BlumTod:
                         )
                         self.get_balance(access_token, only_show_balance=True)
                         break
-                    
+
                     message = res.json().get("message", "")
                     if message == "game session not finished":
                         continue
