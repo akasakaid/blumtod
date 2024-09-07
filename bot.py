@@ -68,32 +68,39 @@ class BlumTod:
             if isinstance(tasks, str):
                 self.log(f"{kuning}failed get task list !")
                 return
-            for task in tasks.get("tasks"):
-                # print(task)
-                task_id = task.get("id")
-                task_title = task.get("title")
-                task_status = task.get("status")
-                if task_status == "NOT_STARTED":
-                    url_start = (
-                        f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/start"
-                    )
-                    res = self.http(url_start, headers, "")
-                    if "message" in res.text:
-                        continue
+            for k in list(tasks.keys()):
+                for t in tasks.get(k):
+                    for task in t.get("tasks"):
+                        task_id = task.get("id")
+                        task_title = task.get("title")
+                        task_status = task.get("status")
+                        start_task_url = f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/start"
+                        claim_task_url = f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/claim"
+                        if task_status == "FINISHED":
+                            self.log(
+                                f"{kuning}already complete task id {putih}{task_id} !"
+                            )
+                            continue
+                        if task_status == "READY_FOR_CLAIM":
+                            _res = self.http(claim_task_url, headers, "")
+                            _status = _res.json().get("status")
+                            if _status == "FINISHED":
+                                self.log(
+                                    f"{hijau}success complete task id {putih}{task_id} !"
+                                )
+                                continue
 
-                    url_claim = (
-                        f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/claim"
-                    )
-                    res = self.http(url_claim, headers, "")
-                    if "message" in res.text:
-                        continue
-
-                    status = res.json().get("status")
-                    if status == "CLAIMED":
-                        self.log(f"{hijau}success complete task id {task_id} !")
-                        continue
-
-                self.log(f"{kuning}already complete task id {task_id} !")
+                        _res = self.http(start_task_url, headers, "")
+                        self.countdown(5)
+                        _status = _res.json().get("status")
+                        if _status == "STARTED":
+                            _res = self.http(claim_task_url, headers, "")
+                            _status = _res.json().get("status")
+                            if _status == "FINISHED":
+                                self.log(
+                                    f"{hijau}success complete task id {putih}{task_id} !"
+                                )
+                                continue
 
     def set_proxy(self, proxy=None):
         self.ses = requests.Session()
@@ -264,6 +271,8 @@ class BlumTod:
         open("tokens.json", "w").write(json.dumps(tokens, indent=4))
 
     def is_expired(self, token):
+        if token is None or isinstance(token,bool):
+            return True
         header, payload, sign = token.split(".")
         payload = b64decode(payload + "==").decode()
         jload = json.loads(payload)
@@ -323,7 +332,7 @@ class BlumTod:
                 if not os.path.exists(logfile):
                     open(logfile, "a")
                 logsize = os.path.getsize(logfile)
-                if (logsize / (1024 * 2)) > 1:
+                if (logsize / 1024 / 1024) > 1:
                     open(logfile, "w").write("")
                 if data is None:
                     res = self.ses.get(url, headers=headers, timeout=30)
