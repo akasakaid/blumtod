@@ -61,6 +61,14 @@ class BlumTod:
 
     def solve_task(self, access_token):
         url_task = "https://game-domain.blum.codes/api/v1/tasks"
+        ignore_tasks = [
+            "39391eb2-f031-4954-bd8a-e7aecbb1f192",  # wallet connect
+            "d3716390-ce5b-4c26-b82e-e45ea7eba258",  # invite task
+            "f382ec3f-089d-46de-b921-b92adfd3327a", # invite task
+            "220ee7b1-cca4-4af8-838a-2001cb42b813", # invite task
+            "5ecf9c15-d477-420b-badf-058537489524", # invite task
+            "c4e04f2e-bbf5-4e31-917b-8bfa7c4aa3aa" # invite task
+        ]
         headers = self.base_headers.copy()
         headers["Authorization"] = f"Bearer {access_token}"
         res = self.http(url_task, headers)
@@ -76,6 +84,8 @@ class BlumTod:
                         task_status = task.get("status")
                         start_task_url = f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/start"
                         claim_task_url = f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/claim"
+                        if task_id in ignore_tasks:
+                            continue
                         if task_status == "FINISHED":
                             self.log(
                                 f"{kuning}already complete task id {putih}{task_id} !"
@@ -166,7 +176,7 @@ class BlumTod:
         return round(end / 1000)
 
     def get_friend(self, access_token):
-        url = "https://gateway.blum.codes/v1/friends/balance"
+        url = "https://user-domain.blum.codes/api/v1/friends/balance"
         headers = self.base_headers.copy()
         headers["Authorization"] = f"Bearer {access_token}"
         res = self.http(url, headers)
@@ -177,7 +187,7 @@ class BlumTod:
         self.log(f"{hijau}referral balance : {putih}{amount_claim}")
         self.log(f"{putih}can claim referral : {hijau}{can_claim}")
         if can_claim:
-            url_claim = "https://gateway.blum.codes/v1/friends/claim"
+            url_claim = "https://user-domain.blum.codes/api/v1/friends/claim"
             res = self.http(url_claim, headers, "")
             if res.json().get("claimBalance") is not None:
                 self.log(f"{hijau}success claim referral bonus !")
@@ -271,7 +281,7 @@ class BlumTod:
         open("tokens.json", "w").write(json.dumps(tokens, indent=4))
 
     def is_expired(self, token):
-        if token is None or isinstance(token,bool):
+        if token is None or isinstance(token, bool):
             return True
         header, payload, sign = token.split(".")
         payload = b64decode(payload + "==").decode()
