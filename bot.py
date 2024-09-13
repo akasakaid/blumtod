@@ -59,58 +59,65 @@ class BlumTod:
         self.log(f"{hijau}success get access token ")
         return access_token
 
-    def solve_task(self, access_token):
-        url_task = "https://game-domain.blum.codes/api/v1/tasks"
+    def solve(self, task: dict, access_token):
+        headers = self.base_headers.copy()
+        headers["authorization"] = f"Bearer {access_token}"
         ignore_tasks = [
             "39391eb2-f031-4954-bd8a-e7aecbb1f192",  # wallet connect
             "d3716390-ce5b-4c26-b82e-e45ea7eba258",  # invite task
-            "f382ec3f-089d-46de-b921-b92adfd3327a", # invite task
-            "220ee7b1-cca4-4af8-838a-2001cb42b813", # invite task
-            "5ecf9c15-d477-420b-badf-058537489524", # invite task
-            "c4e04f2e-bbf5-4e31-917b-8bfa7c4aa3aa" # invite task
+            "f382ec3f-089d-46de-b921-b92adfd3327a",  # invite task
+            "220ee7b1-cca4-4af8-838a-2001cb42b813",  # invite task
+            "5ecf9c15-d477-420b-badf-058537489524",  # invite task
+            "c4e04f2e-bbf5-4e31-917b-8bfa7c4aa3aa",  # invite task
         ]
+        task_id = task.get("id")
+        task_title = task.get("title")
+        task_status = task.get("status")
+        start_task_url = f"https://earn-domain.blum.codes/api/v1/tasks/{task_id}/start"
+        claim_task_url = f"https://earn-domain.blum.codes/api/v1/tasks/{task_id}/claim"
+        if task_id in ignore_tasks:
+            return
+        if task_status == "FINISHED":
+            self.log(f"{kuning}already complete task id {putih}{task_id} !")
+            return
+        if task_status == "READY_FOR_CLAIM":
+            _res = self.http(claim_task_url, headers, "")
+            _status = _res.json().get("status")
+            if _status == "FINISHED":
+                self.log(f"{hijau}success complete task id {putih}{task_id} !")
+                return
+        _res = self.http(start_task_url, headers, "")
+        self.countdown(5)
+        _status = _res.json().get("status")
+        if _status == "STARTED":
+            _res = self.http(claim_task_url, headers, "")
+            _status = _res.json().get("status")
+            if _status == "FINISHED":
+                self.log(f"{hijau}success complete task id {putih}{task_id} !")
+                return
+
+    def solve_task(self, access_token):
+        url_task = "https://earn-domain.blum.codes/api/v1/tasks"
         headers = self.base_headers.copy()
-        headers["Authorization"] = f"Bearer {access_token}"
+        headers["authorization"] = f"Bearer {access_token}"
         res = self.http(url_task, headers)
         for tasks in res.json():
             if isinstance(tasks, str):
                 self.log(f"{kuning}failed get task list !")
                 return
             for k in list(tasks.keys()):
+                if k != "tasks" and k != "subSections":
+                    continue
                 for t in tasks.get(k):
+                    if isinstance(t, dict):
+                        subtasks = t.get("subTasks")
+                        if subtasks is not None:
+                            for task in subtasks:
+                                self.solve(task, access_token)
+                            self.solve(t, access_token)
+                            continue
                     for task in t.get("tasks"):
-                        task_id = task.get("id")
-                        task_title = task.get("title")
-                        task_status = task.get("status")
-                        start_task_url = f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/start"
-                        claim_task_url = f"https://game-domain.blum.codes/api/v1/tasks/{task_id}/claim"
-                        if task_id in ignore_tasks:
-                            continue
-                        if task_status == "FINISHED":
-                            self.log(
-                                f"{kuning}already complete task id {putih}{task_id} !"
-                            )
-                            continue
-                        if task_status == "READY_FOR_CLAIM":
-                            _res = self.http(claim_task_url, headers, "")
-                            _status = _res.json().get("status")
-                            if _status == "FINISHED":
-                                self.log(
-                                    f"{hijau}success complete task id {putih}{task_id} !"
-                                )
-                                continue
-
-                        _res = self.http(start_task_url, headers, "")
-                        self.countdown(5)
-                        _status = _res.json().get("status")
-                        if _status == "STARTED":
-                            _res = self.http(claim_task_url, headers, "")
-                            _status = _res.json().get("status")
-                            if _status == "FINISHED":
-                                self.log(
-                                    f"{hijau}success complete task id {putih}{task_id} !"
-                                )
-                                continue
+                        self.solve(task, access_token)
 
     def set_proxy(self, proxy=None):
         self.ses = requests.Session()
