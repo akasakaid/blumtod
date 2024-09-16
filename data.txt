@@ -1,19 +1,1 @@
-user=%7B%22id%22%3A6786750694%2C%22first_name%22%3A%22Joannemodillas%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Joannameliodas%22%2C%22language_code%22%3A%22id%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-8849403368775954375&start_param=ref_xXo6plxgLt&auth_date=1726472896&hash=9dedcc50dc377d2548043c065ca8193cb262b7e7cb242b9235b4458b37111357
 
-query_id=AAFOvL0dAwAAAE68vR1otsoD&user=%7B%22id%22%3A6941424718%2C%22first_name%22%3A%22Jeremiah%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Jeremiahlol%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1726473693&hash=09184764cd139e0053b664ea0d019ba869cef039b0a1c99d83fb007b65c0f211
-
-query_id=AAFdA7llAgAAAF0DuWUKPq9N&user=%7B%22id%22%3A6001591133%2C%22first_name%22%3A%22Baironahdiamlah%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Baironahdiamlah%22%2C%22language_code%22%3A%22id%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1726474005&hash=9dd7a31d31749369d2c130a6ba40ad2d2882be290054892cf55ab26775803881
-
-query_id=AAF_Q_4WAwAAAH9D_hbLsE3x&user=%7B%22id%22%3A6828213119%2C%22first_name%22%3A%22Lykamanica%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Lykamanica%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1726474561&hash=7be06bfb5c68ee63c8abb780d1e2da687bf54a35ced756bc6a2e5746ab028a86
-
-query_id=AAG8GS8RAwAAALwZLxF_y_cc&user=%7B%22id%22%3A6730750396%2C%22first_name%22%3A%22Julian_kerz%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Julian_kerz%22%2C%22language_code%22%3A%22id%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1726474785&hash=cfbde402d183daf448deb1731f8fa523d2abd7cb23f66217a8cc760260c917e3
-
-user=%7B%22id%22%3A6706595560%2C%22first_name%22%3A%22ArhaMercado%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Arhamerchardo%22%2C%22language_code%22%3A%22id%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-1385420781378950978&start_param=ref_4TWZu2RZuh&auth_date=1726475022&hash=2d48a215d8a4e8b4e99ee731b36c434360c4ec2d8d922f7a2d4e07be58fb64b6
-
-query_id=AAElllYgAwAAACWWViCdkWRU&user=%7B%22id%22%3A6984996389%2C%22first_name%22%3A%22Glokuhon%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Glokuhon%22%2C%22language_code%22%3A%22id%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1726475395&hash=275ecf7a9f0bfea1bcaf5dc8254570bb1028955522320443f2184eed1d467d5b
-
-query_id=AAER-C1zAgAAABH4LXNG0PM3&user=%7B%22id%22%3A6227359761%2C%22first_name%22%3A%22Tombukuregina%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Tombukuregina%22%2C%22language_code%22%3A%22id%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1726475694&hash=488502b5e6c48aa59b3c5f1e0598d6dc139a885024fea67c4bc7cb291c17c742
-
-query_id=AAELWH1qAAAAAAtYfWowBUG-&user=%7B%22id%22%3A1786599435%2C%22first_name%22%3A%22Andro139%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22andro139%22%2C%22language_code%22%3A%22id%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1726475910&hash=8d880d48c08ca3bc414bc4bc81442e88132657ee6ef697e99a5a288841b3598b 
-
-query_id=AAFIh_dhAAAAAEiH92Gmb6SG&user=%7B%22id%22%3A1643611976%2C%22first_name%22%3A%22arfarnani%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Arfarnani%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1726476165&hash=a4f76ddff5b9c7541ceddc45799365b4b41a48abe06e29f06504c60649a0f341
