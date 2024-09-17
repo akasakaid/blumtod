@@ -278,7 +278,7 @@ class BlumTod:
                 for tasks in res.json():
                     if isinstance(tasks, str):
                         self.log(f"{yellow}failed get task list !")
-                        return
+                        break
                     for k in list(tasks.keys()):
                         if k != "tasks" and k != "subSections":
                             continue
@@ -478,8 +478,8 @@ async def main():
                 auto_task=cfg.get("auto_task"),
                 auto_game=cfg.get("auto_game"),
                 auto_claim=cfg.get("auto_claim"),
-                low=cfg.get("low", 240),
-                high=cfg.get("high", 250),
+                low=int(cfg.get("low", 240)),
+                high=int(cfg.get("high", 250)),
             )
         menu = f"""
     {green}1{white}.{green}) {white}set on/off auto claim ({(green + "active" if config.auto_claim else red + "non-active")})
