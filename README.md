@@ -1,235 +1,241 @@
-# Blumtod
+
+# BlumTod
 
 AUTO CLAIM FOR BLUM / @blum
 
-[Click to read the readme in Indonesian](README_ID.md)
+[Klik Disini README Dalam Bahasa Indonesia](README_ID.md)
 
 # Table of Contents
-- [Blumtod](#blumtod)
+- [BlumTod](#blumtod)
 - [Table of Contents](#table-of-contents)
 - [Warning](#warning)
-- [Feature](#feature)
-- [Register ?](#register-)
+- [Support My Work!](#support-my-work)
+- [Available Features](#available-features)
+- [Registration](#registration)
 - [How to Use](#how-to-use)
-  - [Bot.py parameter feature](#botpy-parameter-feature)
-  - [About Config.json](#about-configjson)
-  - [About Proxy](#about-proxy)
+  - [Command Line Options / Arguments](#command-line-options--arguments)
+  - [About Proxies](#about-proxies)
   - [Windows](#windows)
   - [Linux](#linux)
   - [Termux](#termux)
-- [Video Guide to Get Data](#video-guide-to-get-data)
-- [Javascript Command to Get Telegram Data for Desktop](#javascript-command-to-get-telegram-data-for-desktop)
-- [Run for 24/7](#run-for-247)
+- [How to Get the Query](#how-to-get-the-query)
+- [JavaScript Code to Get Data in Telegram Desktop App](#javascript-code-to-get-data-in-telegram-desktop-app)
+- [Running 24/7](#running-247)
 - [Discussion](#discussion)
-- [Support My Work](#support-my-work)
-- [QnA](#qna)
-- [Thank you \< 3](#thank-you--3)
+- [Questions and Answers](#questions-and-answers)
+- [Thank You](#thank-you)
 
 # Warning
 
 All risks are borne by the user
 
-# Feature
+# Support My Work!
 
-- [x] Auto Claim
-- [x] Auto Claim Daily
-- [x] Proxy Support, see [About Proxy](#about-proxy)
-- [x] Support Multi Account
-- [x] Auto Claim Bonus Referral
-- [x] Auto Complete Task, see [About Config.json](#about-configjson)
-- [x] Auto Play Game (random input from user), see [About Config.json](#about-configjson)
+If you like my work, you can support me through the following links:
 
-# Register ?
+- [Indonesia] https://s.id/nusanqr (QRIS)
+- [Indonesia] https://trakteer.id/fawwazthoerif/tip
+- [Global] https://sociabuzz.com/fawwazthoerif/tribe
+- If you want to send support in another form, you can contact me via Telegram.
 
-Click the following url to register : [https://t.me/BlumCryptoBot/app?startapp=ref_aPYIYj1oKc](https://t.me/BlumCryptoBot/app?startapp=ref_aPYIYj1oKc)
+# Available Features
+
+- [x] Automatic Claim Every 8 Hours
+- [x] Automatic Daily Check-In (Login)
+- [x] Automatic Claim of Referral Results
+- [x] Proxy Support
+- [x] Automatic Task Completion
+- [x] Automatic Game Play after Claiming
+- [x] Multiprocessing Support
+
+# Registration
+
+Click the following link to register: [https://t.me/BlumCryptoBot/app?startapp=ref_aPYIYj1oKc](https://t.me/BlumCryptoBot/app?startapp=ref_aPYIYj1oKc)
 
 # How to Use
 
-## Bot.py parameter feature
+## Command Line Options / Arguments
 
-Here are some parameters to enable feature
+This script/program supports several argument parameters that can be used. Here's an explanation of the arguments:
 
-| parameter | description                                    |
-| --------- | ---------------------------------------------- |
-| --data    | set custom file data input (default: data.txt) |
+`--data` / `-D`: Used when you have a different filename for storing account data. By default, the filename used by this script/program to store account data is `data.txt`. For example, if you have a file named `query.txt` as the file storing account data, just run `bot.py` with the `--data` / `-D` argument. Example: `python bot.py --data query.txt`
 
-## About Config.json
+`--proxy` / `-P`: Used when you have a different filename for storing the proxy list. The filename used by this script/program to store the proxy list is `proxies.txt`. For example, if you have a file named `prox.txt` as the file storing the proxy list, you just need to add the `--proxy` / `-P` argument parameter to use your proxy file. Example: `python bot.py --proxy prox.txt`
 
-Here Config.json Description
-| key                | description                                                                                                                                       |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| interval           | value type is integer/real number <br> interval is delay between accounts                                                                         |
-| auto_complete_task | value type is bool (true/false), enable (true) to active auto complete task                                                                       |
-| auto_play_game     | value type is bool (true/false), enable (true) to active auto play game                                                                           |
-| game_point         | value type is integer/real number<br>low : minimum points earned when playing the game <br><br>high : maximal points earned when playing the game |
+`--worker` / `-W`: This argument is used to customize the number of threads/workers used when the bot script is running. By default, this script/software uses (total CPU cores / 2) as the number of workers. For example, if your CPU has 6 cores, the number of workers used is 3. You can customize the number of workers using this argument. For example, if you want to set the number of workers to 100, run `bot.py` with this argument: `python bot.py --worker 100`. And if you don't like using workers/threads/multiprocessing, you can customize the worker to 1, for example: `python bot.py --worker 1`.
 
-## About Proxy
+## About Proxies
 
-Register on this site to get free proxy : [Here](https://www.webshare.io/?referral_code=dwj0m9cdi4mp)
+Register on the following website to get free proxies: [Here](https://www.webshare.io/?referral_code=dwj0m9cdi4mp)
 
-You can add your proxy list in `proxies.txt` and proxy format is like example below :
+Website with the cheapest proxy price $1/GB [Here](https://dataimpulse.com/?aff=48082)
 
-Format :
+You can add proxy lists in the `proxies.txt` file, and the proxy format is as follows:
+
+If there is authentication:
+
+Format : 
 
 ```
-http://host:port
-http://user:pass@host:port
+protocol://user:password@hostname:port
 ```
 
-Example :
+Example:
 
 ```
-http://127.0.0.1:6969
-http://user:pass@127.0.0.1:6969
-socks5://127.0.0.1:6969
-socks5://user:pass@127.0.0.1:6969
+http://admin:admin@69.69.69.69:6969
 ```
+
+If there is no authentication:
+
+Format:
+
+```
+protocol://hostname:port
+```
+
+Example:
+
+```
+http://69.69.69.69:6969
+```
+
+Please pay close attention to whether the proxy you are using requires authentication or not, as many people DM me asking about how to use proxies.
 
 ## Windows 
 
-1. Make sure you computer was installed python and git.
-   
-   Suggestion: Use python version 3.8+ (3.8 and above or latest)
+1. Make sure your computer has Python and Git installed.
 
-   python site : [https://python.org](https://python.org)
+    Recommendation: Use Python version 3.8+ (3.8 or newer)
    
-   git site : [https://git-scm.com/](https://git-scm.com/)
+   Python site: [https://python.org](https://python.org)
+   
+   Git site: [https://git-scm.com/](https://git-scm.com/)
 
-2. Clone this repository
+2. Clone this repository.
    ```shell
    git clone https://github.com/akasakaid/blumtod.git
    ```
 
-3. goto blumtod directory
+3. Enter the BlumTod folder
    ```
    cd blumtod
    ```
 
-4. install the require library
+4. Install the required modules/libraries.
    ```
    python -m pip install -r requirements.txt
    ```
 
-5. Edit `data.txt`, input you data token in `data.txt`, find you token in [How to Find Account Token](#how-to-find-account-token). One line for one data account, if you want add you second account add in new line!
+5. Edit the `data.txt` file, enter your query data into the `data.txt` file. You can get your query by following [How to Get the Query](#how-to-get-the-query). One line for 1 account, if you want to add a 2nd account, fill it in on a new line.
 
-6. execute the main program 
+6. Run the program/script.
    ```
    python bot.py
    ```
 
-## Linux
+## Linux 
 
-1. Make sure you computer was installed python and git.
+1. Make sure your computer has Python and Git installed.
+
+    Recommendation: Use Python version 3.8+ (3.8 or newer)
    
-   Suggestion: Use python version 3.8+ (3.8 and above or latest)
-
-   python
+   Python
    ```shell
    sudo apt install python3 python3-pip
    ```
-   git
+   Git
    ```shell
    sudo apt install git
    ```
 
-2. Clone this repository
-   
+2. Clone this repository.
    ```shell
    git clone https://github.com/akasakaid/blumtod.git
    ```
 
-3. goto blumtod directory
-
-   ```shell
+3. Enter the BlumTod folder
+   ```
    cd blumtod
    ```
 
-4. Install the require library
-   
+4. Install the required modules/libraries.
    ```
-   python3 -m pip install -r requirements.txt
+   python -m pip install -r requirements.txt
    ```
 
-5. Edit `data.txt`, input you data token in `data.txt`, find you token in [How to Find Account Token](#how-to-find-account-token). One line for one data account, if you want add you second account add in new line!
+5. Edit the `data.txt` file, enter your query data into the `data.txt` file. You can get your query by following [How to Get the Query](#how-to-get-the-query). One line for 1 account, if you want to add a 2nd account, fill it in on a new line.
 
-6. execute the main program 
+6. Run the program/script.
    ```
    python bot.py
    ```
 
 ## Termux
 
-1. Make sure you termux was installed python and git.
-   
-   python
-   ```
-   pkg install python
-   ```
+1. Make sure your device has Python and Git installed.
 
-   git
+    Recommendation: Use Python version 3.8+ (3.8 or newer)
+   
+   Python
+   ```shell
+   pkg install python3
    ```
+   Git
+   ```shell
    pkg install git
    ```
 
-2. Clone this repository
+2. Clone this repository.
    ```shell
    git clone https://github.com/akasakaid/blumtod.git
    ```
 
-3. goto blumtod directory
+3. Enter the BlumTod folder
    ```
    cd blumtod
    ```
 
-4. install the require library
+4. Install the required modules/libraries.
    ```
    python -m pip install -r requirements.txt
    ```
 
-5. Edit `data.txt`, input you data token in `data.txt`, find you token in [How to Find Account Token](#how-to-find-account-token). One line for one data account, if you want add you second account add in new line!
+5. Edit the `data.txt` file, enter your query data into the `data.txt` file. You can get your query by following [How to Get the Query](#how-to-get-the-query). One line for 1 account, if you want to add a 2nd account, fill it in on a new line.
 
-6. execute the main program 
+6. Run the program/script.
    ```
    python bot.py
    ```
 
-# Video Guide to Get Data
+# How to Get the Query
 
-The require data is same like [pixelversebot](https://github.com/akasakaid/pixelversebot) so you can watch same tutorial / video guide to get data !
+The required data is the same as [pixelversebot](https://github.com/akasakaid/pixelversebot), so you can watch the same tutorial video!
 
-Here : [https://youtu.be/KTZW9A75guI](https://youtu.be/KTZW9A75guI)
+Here: [https://youtu.be/KTZW9A75guI](https://youtu.be/KTZW9A75guI)
 
-# Javascript Command to Get Telegram Data for Desktop
+# JavaScript Code to Get Data in Telegram Desktop App
 
 ```javascript
 copy(Telegram.WebApp.initData)
 ```
 
-# Run for 24/7 
+# Running 24/7
 
-You can run the script bot for 24/7 using vps / rdp. You can use `screen` application in vps linux to running the script bot in background process
+You can run the bot script 24/7 using a VPS/RDP. You can use the `screen` application if using a Linux operating system to run the bot script in the background.
 
 # Discussion
 
-If you have an question or something you can ask in here : [@sdsproject_chat](https://t.me/sdsproject_chat)
+If you have questions or anything else, you can ask here: [@sdsproject_chat](https://t.me/sdsproject_chat)
 
-# Support My Work
+# Questions and Answers
 
-To support me you can buy me a coffee via website in below
+Q: Is it mandatory to use a proxy with this bot script/program?
 
-- [Indonesian] https://s.id/nusanqr (QRIS)
-- [Indonesian] https://trakteer.id/fawwazthoerif/tip
-- [Global] https://sociabuzz.com/fawwazthoerif/tribe
+A: No, this bot script/program does not require a proxy.
 
-# QnA
+Q: How do I use a proxy?
 
-Q : Is this bot/program script required to use a proxy?
+A: The simple explanation is that you just need to fill the `proxies.txt` file with the proxy format I explained above.
 
-A : No, this bot/program script is not required to use a proxy.
-
-Q : How can I use a proxy?
-
-A : Simply fill in the proxies.txt file according to the format I have explained.
-
-
-# Thank you < 3
+# Thank You
