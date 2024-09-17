@@ -18,6 +18,7 @@ AUTO CLAIM FOR BLUM / @blum
 - [Cara Mendapatkan Query](#cara-mendapatkan-query)
 - [Kode Javascript untuk Mendapatkan Data di Aplikasi Telegram Desktop](#kode-javascript-untuk-mendapatkan-data-di-aplikasi-telegram-desktop)
 - [Menjalankan Selama 24/7](#menjalankan-selama-247)
+- [Tabel Eror](#tabel-eror)
 - [Diskusi](#diskusi)
 - [Pertanyaan  dan Jawaban](#pertanyaan--dan-jawaban)
 - [Terima Kasih](#terima-kasih)
@@ -60,6 +61,8 @@ Script / program ini juga mendukung beberapa argument parameter yang bisa dipaka
 `--proxy` / `-P` bisa digunakan ketika anda mempunyai nama file yang berbeda untuk menyimpan list proxy. Nama file yang digunakan oleh script / program ini untuk menyimpan daftar proxy adalah `proxies.txt`, semisal anda mempunyai file bernama `prox.txt` sebagai file yang menyimpan daftar proxy, anda hanya tinggal menambahkan argument parameter `--proxy` / `-P` untuk dapat menggunakan file proxy anda. Contoh `python bot.py --proxy prox.txt`
 
 `--worker` / `-W` argument ini berfungsi untuk melakukan kustomisasi jumlah thread / worker yang digunakan ketika script bot ini berjalan. Secara bawaan script / software ini jumlah worker nya adalah (total core cpu / 2), semisal cpu anda memiliki core 6 maka jumlah worker yang digunakan adalah 3. Anda bisa melakukan kustomisasi untuk jumlah worker ini menggunakan argument ini. Contohnya anda ingin membuat jumlah worker nya menjadi 100 maka jalankan `bot.py` dengan argument seperti ini `python bot.py --worker 100`. Dan jika anda tidak suka menggunakan worker / thread / multiprocessing maka anda bisa melakukan kustomisasi worker menjadi 1, contoh `python bot.py --worker 1`.
+
+`--action` / `-A` argument ini berfungsi untuk langsung masuk ke kemu yang dituju, misal dalam script bot ini ada 5 menu jika anda tidak ingin melakukan input secara manual anda bisa menggunakan argument ini untuk langsung masuk ke menu yang dituju. Contoh : `python bot.py --action 5` dalalm contoh tersebut berarti anda akan langsung masuk ke menu nomor 5. Argument ini berguna jika kalian menggunakan docker / pm2 untuk menjalankan script bot di proses background.
 
 ## Tentang Proxy
 
@@ -226,6 +229,14 @@ copy(Telegram.WebApp.initData)
 # Menjalankan Selama 24/7
 
 Anda bisa menjalankan script bot dalam 24/7 menggunakan vps / rdp. Anda bisa menggunakan aplikasi `screen` jika menggunakan sistem operasi linux untuk menjalakan script botnya di latar belakang.
+
+# Tabel Eror
+
+| error                 | deskripsi                                                                                                                     |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| failed get json error | Ini dikarenakan respon server tidak berupa json dan mungkin berupa html, bisa kalian cek di file http.log untuk respon server |
+| failed get task list  | Ini dikarenakan respon server tidak memberikan respon yang seharunya, bisa kalian cek di file http.log untuk respon server    |
+| cannot start game     | Sama seperti error diatas, ini dikarenakan server. Kalian bisa cek di file http.log untuk respon server                       |
 
 # Diskusi
 
