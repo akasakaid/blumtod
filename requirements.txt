@@ -1,3 +1,7 @@
 requests
 requests[socks]
 colorama
+httpx
+httpx_socks
+aiofiles
+aiosqlite
