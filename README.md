@@ -1,9 +1,8 @@
+Here's a good English translation of the README you provided:
 
 # BlumTod
 
 AUTO CLAIM FOR BLUM / @blum
-
-[Klik Disini README Dalam Bahasa Indonesia](README_ID.md)
 
 # Table of Contents
 - [BlumTod](#blumtod)
@@ -21,6 +20,7 @@ AUTO CLAIM FOR BLUM / @blum
 - [How to Get the Query](#how-to-get-the-query)
 - [JavaScript Code to Get Data in Telegram Desktop App](#javascript-code-to-get-data-in-telegram-desktop-app)
 - [Running 24/7](#running-247)
+- [Error Table](#error-table)
 - [Discussion](#discussion)
 - [Questions and Answers](#questions-and-answers)
 - [Thank You](#thank-you)
@@ -46,7 +46,7 @@ If you like my work, you can support me through the following links:
 - [x] Proxy Support
 - [x] Automatic Task Completion
 - [x] Automatic Game Play after Claiming
-- [x] Multiprocessing Support
+- [x] Multi-process support
 
 # Registration
 
@@ -64,6 +64,8 @@ This script/program supports several argument parameters that can be used. Here'
 
 `--worker` / `-W`: This argument is used to customize the number of threads/workers used when the bot script is running. By default, this script/software uses (total CPU cores / 2) as the number of workers. For example, if your CPU has 6 cores, the number of workers used is 3. You can customize the number of workers using this argument. For example, if you want to set the number of workers to 100, run `bot.py` with this argument: `python bot.py --worker 100`. And if you don't like using workers/threads/multiprocessing, you can customize the worker to 1, for example: `python bot.py --worker 1`.
 
+`--action` / `-A`: This argument is used to directly enter the desired menu. For example, if this bot script has 5 menus and you don't want to input manually, you can use this argument to directly enter the desired menu. Example: `python bot.py --action 5` means you will directly enter menu number 5. This argument is useful if you're using docker/pm2 to run the bot script in the background process.
+
 ## About Proxies
 
 Register on the following website to get free proxies: [Here](https://www.webshare.io/?referral_code=dwj0m9cdi4mp)
@@ -74,7 +76,7 @@ You can add proxy lists in the `proxies.txt` file, and the proxy format is as fo
 
 If there is authentication:
 
-Format : 
+Format:
 
 ```
 protocol://user:password@hostname:port
@@ -223,6 +225,14 @@ copy(Telegram.WebApp.initData)
 # Running 24/7
 
 You can run the bot script 24/7 using a VPS/RDP. You can use the `screen` application if using a Linux operating system to run the bot script in the background.
+
+# Error Table
+
+| Error                 | Description                                                                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| failed get json error | This is because the server response is not in JSON format and may be in HTML. You can check the server response in the http.log file |
+| failed get task list  | This is because the server response doesn't provide the expected response. You can check the server response in the http.log file    |
+| cannot start game     | Similar to the above error, this is due to the server. You can check the server response in the http.log file                        |
 
 # Discussion
 
