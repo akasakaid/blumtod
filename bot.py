@@ -451,9 +451,7 @@ async def main():
     )
     arg.add_argument("--marin", action="store_true")
     args = arg.parse_args()
-    if not args.marin:
-        os.system("cls" if os.name == "nt" else "clear")
-    print(banner)
+
     if not await aiofiles.ospath.exists(args.data):
         async with aiofiles.open(args.data, "a") as w:
             pass
@@ -471,6 +469,9 @@ async def main():
             }
             await w.write(json.dumps(_config, indent=4))
     while True:
+        if not args.marin:
+            os.system("cls" if os.name == "nt" else "clear")
+        print(banner)
         async with aiofiles.open(config_file) as r:
             read = await r.read()
             cfg = json.loads(read)
@@ -481,7 +482,13 @@ async def main():
                 low=int(cfg.get("low", 240)),
                 high=int(cfg.get("high", 250)),
             )
+        datas, proxies = await get_data(data_file=args.data, proxy_file=args.proxy)
         menu = f"""
+{white}data file :{green} {args.data}
+{white}proxy file :{green} {args.proxy}
+{green}total data :{white} {len(datas)}
+{green}total proxy :{white} {len(proxies)}
+
     {green}1{white}.{green}) {white}set on/off auto claim ({(green + "active" if config.auto_claim else red + "non-active")})
     {green}2{white}.{green}) {white}set on/off auto solve task ({(green + "active" if config.auto_task else red + "non-active")})
     {green}3{white}.{green}) {white}set on/off auto play game ({(green + "active" if config.auto_game else red + "non-active")})
@@ -555,7 +562,7 @@ async def main():
                 ]
                 result = await asyncio.gather(*tasks)
                 end = int(datetime.now().timestamp())
-                total = (min(result) - (end - start)) - end
+                total = min(result) - end
                 await countdown(total)
 
 
