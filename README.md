@@ -1,5 +1,3 @@
-Here's a good English translation of the README you provided:
-
 # BlumTod
 
 AUTO CLAIM FOR BLUM / @blum
