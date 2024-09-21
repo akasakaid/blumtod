@@ -61,6 +61,7 @@ async def get_by_id(id):
                     "first_name": result["first_name"],
                     "balance": result["balance"],
                 }
+
             return data
 
 
@@ -73,6 +74,7 @@ async def get_token(id):
         db.row_factory = aiosqlite.Row
         async with db.execute(query, values) as res:
             result = await res.fetchone()
+
             if not result:
                 return result
             return result["token"]
