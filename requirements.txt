@@ -5,3 +5,4 @@ httpx
 httpx_socks
 aiofiles
 aiosqlite
+anyio
