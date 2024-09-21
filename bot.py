@@ -94,14 +94,21 @@ class BlumTod:
         )
 
     async def ipinfo(self):
-        url = "https://ipinfo.io/json"
-        ipinfo_url = "https://api.ipify.org/"
-        ipgeo_url = "https://www.binance.com/bapi/accounts/v2/public/account/ip/country-city-short"
+        ipinfo1_url = "https://ipapi.co/json/"
+        ipinfo2_url = "https://ipwho.is/"
+        ipinfo3_url = "https://freeipapi.com/api/json"
         try:
-            res = await self.ses.get(ipinfo_url)
-            ip = res.text
-            res = await self.ses.get(ipgeo_url)
-            country = res.json().get("data").get("country")
+            res = await self.ses.get(ipinfo1_url)
+            ip = res.json().get("ip")
+            country = res.json().get("country")
+            if not ip:
+                res = await self.ses.get(ipinfo2_url)
+                ip = res.json().get("ip")
+                country = res.json().get("country_code")
+                if not ip:
+                    res = await self.ses.get(ipinfo3_url)
+                    ip = res.json().get("ipAddress")
+                    country = res.json().get("countryCode")
             self.log(f"{green}ip : {white}{ip} {green}country : {white}{country}")
         except json.decoder.JSONDecodeError:
             self.log(f"{green}ip : {white}None {green}country : {white}None")
