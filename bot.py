@@ -215,7 +215,7 @@ class BlumTod:
         if expired:
             result = await self.login()
             if not result:
-                return int(datetime.now().timestamp()) + (3600 * 8)
+                return int(datetime.now().timestamp()) + 300
         else:
             self.headers["authorization"] = f"Bearer {token}"
         res = await self.http(checkin_url, self.headers)
