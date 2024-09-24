@@ -64,9 +64,7 @@ class BlumTod:
             self.valid = False
             self.log(f"{red}this account data has the wrong format.")
             return None
-        uid = re.search(r'"id":(.*?),', user).group(1)
-        first_name = re.search(r'first_name":"(.*?)"', user).group(1)
-        self.user = {"id": uid, "first_name": first_name}
+        self.user = json.loads(user)
         if len(self.proxies) > 0:
             proxy = self.get_random_proxy(id, False)
             transport = AsyncProxyTransport.from_url(proxy)
@@ -142,7 +140,11 @@ class BlumTod:
                     continue
 
                 return res
-            except (httpx.ProxyError, python_socks._errors.ProxyTimeoutError):
+            except (
+                httpx.ProxyError,
+                python_socks._errors.ProxyTimeoutError,
+                python_socks.ProxyError,
+            ):
                 proxy = self.get_random_proxy(0, israndom=True)
                 transport = AsyncProxyTransport.from_url(proxy)
                 self.ses = httpx.AsyncClient(transport=transport)
@@ -184,12 +186,13 @@ class BlumTod:
         token = res.json().get("token")
         if not token:
             self.log(f"{red}failed get access token, check log file http.log !")
-            return 3600
+            return False
         token = token.get("access")
         uid = self.user.get("id")
         await update_token(uid, token)
         self.log(f"{green}success get access token !")
         self.headers["authorization"] = f"Bearer {token}"
+        return True
 
     async def start(self):
         if not self.valid:
@@ -210,7 +213,9 @@ class BlumTod:
         token = await get_token(uid)
         expired = self.is_expired(token=token)
         if expired:
-            await self.login()
+            result = await self.login()
+            if not result:
+                return int(datetime.now().timestamp()) + (3600 * 8)
         else:
             self.headers["authorization"] = f"Bearer {token}"
         res = await self.http(checkin_url, self.headers)
@@ -316,7 +321,9 @@ class BlumTod:
                     break
                 for i in range(play):
                     if self.is_expired(self.headers.get("authorization").split(" ")[1]):
-                        await self.login()
+                        result = await self.login()
+                        if not result:
+                            break
                         continue
                     res = await self.http(play_url, self.headers, "")
                     game_id = res.json().get("gameId")
