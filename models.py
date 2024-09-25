@@ -130,4 +130,4 @@ async def test():
     # await insert(2, "akwokoawak")
 
 
-asyncio.run(test())
+asyncio.run(init())
