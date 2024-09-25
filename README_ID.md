@@ -15,8 +15,10 @@ AUTO CLAIM FOR BLUM / @blum
   - [Windows](#windows)
   - [Linux](#linux)
   - [Termux](#termux)
+- [Melihat Laporan](#melihat-laporan)
 - [Cara Mendapatkan Query](#cara-mendapatkan-query)
 - [Kode Javascript untuk Mendapatkan Data di Aplikasi Telegram Desktop](#kode-javascript-untuk-mendapatkan-data-di-aplikasi-telegram-desktop)
+- [Cara Melakukan Update](#cara-melakukan-update)
 - [Menjalankan Selama 24/7](#menjalankan-selama-247)
 - [Tabel Eror](#tabel-eror)
 - [Diskusi](#diskusi)
@@ -45,6 +47,9 @@ Jika anda suka dengan hasil pekerjaan saya anda bisa mendukung saya melakui taut
 - [x] Otomatis Menyelesaikan Tugas (Task)
 - [x] Otomatis Bermain Game setelah Klaim 
 - [x] Mendukung multi proses
+- [x] User-Agent acak
+- [x] Laporan total saldo semua akun
+- [x] Waktu tunggu sebelum memulai program
 
 # Pendaftar
 
@@ -213,6 +218,14 @@ Tolong diperhatikan dengan saksama apakah proxy yang anda gunakan itu harus meng
    python bot.py
    ```
 
+# Melihat Laporan
+
+Untuk melihat laporan total saldo semua akun anda dapat menjalankan file bernama `report.py`
+
+```shell
+python report.py
+```
+
 
 # Cara Mendapatkan Query
 
@@ -222,13 +235,51 @@ Berikut : [https://youtu.be/KTZW9A75guI](https://youtu.be/KTZW9A75guI)
 
 # Kode Javascript untuk Mendapatkan Data di Aplikasi Telegram Desktop
 
+Berikut beberapa kode javascript yang  bisa dicoba untuk mendapatkan data melalui aplikasi telegram desktop.
+
+Setelah anda melakukan eksesusi kode coba melakukan paste jika tidak muncul maka coba kode javascript selainnya.
+
 ```javascript
 copy(Telegram.WebApp.initData)
 ```
 
+```javascript
+copy(JSON.parse(sessionStorage.__telegram__initParams).tgWebAppData)
+```
+
+# Cara Melakukan Update
+
+Hapus terlebih dahulu file `database.sqlite3`, anda bisa menggunakan peringah terminal dibawah (sesuaikan dengan sistem operasi yang anda gunakan)
+
+Windows CMD / Windows Powershell
+
+```shell
+del database.sqlite3
+```
+
+Linux/Termux/Unix/MacOs
+
+```shell
+rm database.sqlite3
+```
+
+Anda bisa melakukan update hanya dengan perintah `git pull` jika anda memang dari awal sudah melakukan clone repository dengan git.
+Jika anda tidak melakukan clone repository dengan git anda bisa melakukan update paksa dengan perintah dibawah (sesuaikan sistem operasi yang anda gunakan.).
+
+Windows powershell : 
+```shell
+Invoke-WebRequest https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/bot.py -OutFile bot.py; Invoke-WebRequest https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/models.py -OutFile models.py; Invoke-WebRequest https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/requirements.txt -OutFile requirements.txt
+```
+
+Linux/Termux/Unix/Windows CMD/MacOS: 
+
+```shell
+curl https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/bot.py -o bot.py && curl https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/models.py -o models.py && curl https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/requirements.txt -o requirements.txt
+```
+
 # Menjalankan Selama 24/7
 
-Anda bisa menjalankan script bot dalam 24/7 menggunakan vps / rdp. Anda bisa menggunakan aplikasi `screen` jika menggunakan sistem operasi linux untuk menjalakan script botnya di latar belakang.
+Anda bisa menjalankan script bot dalam 24/7 menggunakan vps / rdp. Anda bisa menggunakan aplikasi `screen` atau `pm2` jika menggunakan sistem operasi linux untuk menjalakan script botnya di latar belakang.
 
 # Tabel Eror
 
