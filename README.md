@@ -15,8 +15,10 @@ AUTO CLAIM FOR BLUM / @blum
   - [Windows](#windows)
   - [Linux](#linux)
   - [Termux](#termux)
+- [Viewing Reports](#viewing-reports)
 - [How to Get the Query](#how-to-get-the-query)
 - [JavaScript Code to Get Data in Telegram Desktop App](#javascript-code-to-get-data-in-telegram-desktop-app)
+- [How to Update](#how-to-update)
 - [Running 24/7](#running-247)
 - [Error Table](#error-table)
 - [Discussion](#discussion)
@@ -45,6 +47,9 @@ If you like my work, you can support me through the following links:
 - [x] Automatic Task Completion
 - [x] Automatic Game Play after Claiming
 - [x] Multi-process support
+- [x] Random User-Agent
+- [x] Total balance report of all accounts
+- [x] Waiting time before starting the program
 
 # Registration
 
@@ -208,6 +213,10 @@ Please pay close attention to whether the proxy you are using requires authentic
    python bot.py
    ```
 
+# Viewing Reports
+
+To view a report of the total balance of all accounts you can run a file called `report.py`
+
 # How to Get the Query
 
 The required data is the same as [pixelversebot](https://github.com/akasakaid/pixelversebot), so you can watch the same tutorial video!
@@ -216,13 +225,51 @@ Here: [https://youtu.be/KTZW9A75guI](https://youtu.be/KTZW9A75guI)
 
 # JavaScript Code to Get Data in Telegram Desktop App
 
+Here are some javascript codes that can be tried to get data through the desktop telegram application.
+
+After you execute the code try to paste it if it doesn't appear then try another javascript code.
+
 ```javascript
 copy(Telegram.WebApp.initData)
 ```
 
+```javascript
+copy(JSON.parse(sessionStorage.__telegram__initParams).tgWebAppData)
+```
+
+# How to Update
+
+Delete the `database.sqlite3` file first, you can use the terminal commands below (adjust to the operating system you are using)
+
+Windows CMD / Windows Powershell
+
+```shell
+del database.sqlite3
+```
+
+Linux/Termux/Unix/MacOs
+
+```shell
+rm database.sqlite3
+```
+
+You can update only with the `git pull` command if you have already cloned the repository with git.
+If you did not clone the repository with git you can do a forced update with the command below (adjust the operating system you are using.).
+
+Windows powershell : 
+```shell
+Invoke-WebRequest https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/bot.py -OutFile bot.py; Invoke-WebRequest https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/models.py -OutFile models.py; Invoke-WebRequest https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/requirements.txt -OutFile requirements.txt
+```
+
+Linux/Termux/Unix/Windows CMD/MacOS: 
+
+```shell
+curl https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/bot.py -o bot.py && curl https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/models.py -o models.py && curl https://raw.githubusercontent.com/akasakaid/blumtod/refs/heads/main/requirements.txt -o requirements.txt
+```
+
 # Running 24/7
 
-You can run the bot script 24/7 using a VPS/RDP. You can use the `screen` application if using a Linux operating system to run the bot script in the background.
+You can run the bot script 24/7 using a VPS/RDP. You can use the `screen` or `pm2` application if using a Linux operating system to run the bot script in the background.
 
 # Error Table
 
