@@ -324,7 +324,7 @@ class BlumTod:
                         for task in _tasks:
                             await self.solve(task)
         if self.cfg.auto_game:
-            play_url = "https://game-domain.blum.codes/api/v1/game/play"
+            play_url = "https://game-domain.blum.codes/api/v2/game/play"
             claim_url = "https://game-domain.blum.codes/api/v1/game/claim"
             game = True
             while game:
