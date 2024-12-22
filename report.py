@@ -1,9 +1,10 @@
 import aiofiles
 import asyncio
-from models import get_all
+from asynctinydb import TinyDB, Query
 
 
 async def main():
+    db = TinyDB("db.json")
     start_html = """
 <!DOCTYPE html>
 <html lang="id">
@@ -90,7 +91,7 @@ async def main():
 """
     )
     tot = 0
-    datas = await get_all()
+    datas = await db.all()
     for i in datas:
         balance = i.get("balance", 0)
         if not balance:

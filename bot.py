@@ -1,5 +1,4 @@
 import os
-import re
 import sys
 import json
 import anyio
@@ -8,23 +7,18 @@ import random
 import asyncio
 import argparse
 import aiofiles
+import cfcrawler
 import aiofiles.os
-from base64 import b64decode
-import aiofiles.ospath
-from colorama import init, Fore, Style
-from urllib.parse import parse_qs
-from datetime import datetime
-from models import (
-    get_by_id,
-    update_useragent,
-    insert,
-    update_balance,
-    update_token,
-    init as init_db,
-)
+import ua_generator
 import python_socks
-from httpx_socks import AsyncProxyTransport
+import aiofiles.ospath
+from base64 import b64decode
+from datetime import datetime
+from urllib.parse import parse_qs
 from fake_useragent import UserAgent
+from asynctinydb import TinyDB, Query
+from colorama import init, Fore, Style
+from httpx_socks import AsyncProxyTransport
 
 
 init(autoreset=True)
@@ -56,6 +50,7 @@ class Config:
 
 class BlumTod:
     def __init__(self, id, query, proxies, config: Config):
+        self.db = TinyDB("db.json")
         self.p = id
         self.query = query
         self.proxies = proxies
@@ -71,21 +66,23 @@ class BlumTod:
         if len(self.proxies) > 0:
             proxy = self.get_random_proxy(id, False)
             transport = AsyncProxyTransport.from_url(proxy)
-            self.ses = httpx.AsyncClient(transport=transport, timeout=1000)
+            self.ses = cfcrawler.AsyncClient(transport=transport, timeout=1000)
         else:
-            self.ses = httpx.AsyncClient(timeout=1000)
+            self.ses = cfcrawler.AsyncClient(timeout=1000)
         self.headers = {
-            "accept": "application/json, text/plain, */*",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0",
-            "content-type": "application/json",
-            "origin": "https://telegram.blum.codes",
-            "x-requested-with": "org.telegram.messenger",
-            "sec-fetch-site": "same-site",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-dest": "empty",
-            "referer": "https://telegram.blum.codes/",
-            "accept-encoding": "gzip, deflate",
-            "accept-language": "en,en-US;q=0.9",
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Cache-Control": "no-cache",
+            "Content-Type": "application/json",
+            "Lang": "en",
+            "Pragma": "no-cache",
+            "Priority": "u=1, i",
+            "Sec-Ch-Ua": '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24", "Microsoft Edge WebView2";v="131"',
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": '"Windows"',
+            "Sec-Fetch-Dest": "empty",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Site": "same-site",
         }
 
     def log(self, msg):
@@ -197,10 +194,24 @@ class BlumTod:
             return False
         token = token.get("access")
         uid = self.user.get("id")
-        await update_token(uid, token)
+        await self.db.update({"token": token}, Query().id == uid)
         self.log(f"{green}success get access token !")
         self.headers["authorization"] = f"Bearer {token}"
         return True
+
+    async def checkin(self):
+        url = "https://game-domain.blum.codes/api/v2/daily-reward"
+        res = await self.http(url=url, headers=self.headers)
+        today_reward = res.json().get("todayReward", {}).get("points")
+        is_claim = res.json().get("claim")
+        if is_claim == "unavailable":
+            self.log(f"{yellow}already checkin today !")
+            return False
+        res = await self.http(url=url, headers=self.headers, data="")
+        claimed = res.json().get("claimed")
+        if claimed:
+            self.log(f"{green}success checkin today,reward : {white}{today_reward}")
+            return True
 
     async def start(self):
         rtime = random.randint(self.cfg.clow, self.cfg.chigh)
@@ -211,22 +222,27 @@ class BlumTod:
         friend_balance_url = "https://user-domain.blum.codes/api/v1/friends/balance"
         farming_claim_url = "https://game-domain.blum.codes/api/v1/farming/claim"
         farming_start_url = "https://game-domain.blum.codes/api/v1/farming/start"
-        checkin_url = "https://game-domain.blum.codes/api/v1/daily-reward?offset=-420"
         if len(self.proxies) > 0:
             await self.ipinfo()
         uid = self.user.get("id")
         first_name = self.user.get("first_name")
         self.log(f"{green}login as {white}{first_name}")
-        result = await get_by_id(uid)
-        if not result:
-            await insert(uid, first_name)
-            result = await get_by_id(uid)
-        useragent = result.get("useragent")
-        if useragent is None:
-            useragent = UserAgent(os=["android", "ios", "windows"]).random
-            await update_useragent(uid, useragent)
-        self.headers["user-agent"] = useragent
-        token = result.get("token")
+        result = await self.db.search(Query().id == uid)
+        if len(result) == 0:
+            _ua = ua_generator.generate()
+            await self.db.insert(
+                {
+                    "id": uid,
+                    "first_name": first_name,
+                    "token": None,
+                    "balance": 0,
+                    "ua": _ua.text,
+                }
+            )
+            result = await self.db.search(Query().id == uid)
+        useragent = result[0]["ua"]
+        self.headers["User-Agent"] = useragent
+        token = result[0]["token"]
         expired = self.is_expired(token=token)
         if expired:
             result = await self.login()
@@ -234,12 +250,7 @@ class BlumTod:
                 return int(datetime.now().timestamp()) + 300
         else:
             self.headers["authorization"] = f"Bearer {token}"
-        res = await self.http(checkin_url, self.headers)
-        if res.status_code == 404:
-            self.log(f"{yellow}already check in today !")
-        else:
-            res = await self.http(checkin_url, self.headers, "")
-            self.log(f"{green}success check in today !")
+        await self.checkin()
         while True:
             res = await self.http(balance_url, self.headers)
             timestamp = res.json().get("timestamp")
@@ -250,7 +261,7 @@ class BlumTod:
             timestamp = timestamp / 1000
             break
         balance = res.json().get("availableBalance", 0)
-        await update_balance(uid, balance)
+        await self.db.update({"balance": balance}, Query().id == uid)
         farming = res.json().get("farming")
         end_iso = datetime.now().isoformat(" ")
         end_farming = int(datetime.now().timestamp() * 1000) + random.randint(
@@ -324,8 +335,8 @@ class BlumTod:
                         for task in _tasks:
                             await self.solve(task)
         if self.cfg.auto_game:
-            play_url = "https://game-domain.blum.codes/api/v1/game/play"
-            claim_url = "https://game-domain.blum.codes/api/v1/game/claim"
+            play_url = "https://game-domain.blum.codes/api/v2/game/play"
+            claim_url = "https://game-domain.blum.codes/api/v2/game/claim"
             game = True
             while game:
                 res = await self.http(balance_url, self.headers)
@@ -353,9 +364,22 @@ class BlumTod:
                         self.log(f"{yellow}{message}")
                         continue
                     while True:
-                        await countdown(30)
+                        await countdown(35)
                         point = random.randint(self.cfg.low, self.cfg.high)
-                        data = json.dumps({"gameId": game_id, "points": point})
+                        freeze = random.randint(1, 2)
+                        data = json.dumps(
+                            {"game_id": game_id, "points": point, "freeze": freeze}
+                        )
+                        _headers = {
+                            "User-Agent": UserAgent().random,
+                            "Content-Type": "application/json",
+                        }
+                        res = await self.http(
+                            url="https://blum-payload.sdsproject.org",
+                            headers=_headers,
+                            data=data,
+                        )
+                        data = res.text
                         res = await self.http(claim_url, self.headers, data)
                         if "OK" in res.text:
                             self.log(
@@ -370,7 +394,7 @@ class BlumTod:
         res = await self.http(balance_url, self.headers)
         balance = res.json().get("availableBalance", 0)
         self.log(f"{green}balance :{white}{balance}")
-        await update_balance(uid, balance)
+        await self.db.update({"balance": balance}, Query().id == uid)
         return round(end_farming / 1000)
 
     async def solve(self, task: dict):
@@ -422,6 +446,7 @@ class BlumTod:
                     return
                 task_status = res.json().get("status")
                 continue
+            return
 
 
 async def countdown(t):
@@ -477,7 +502,7 @@ async def main():
     )
     arg.add_argument("--marin", action="store_true")
     args = arg.parse_args()
-    await init_db()
+    # await init_db()
     if not await aiofiles.ospath.exists(args.data):
         async with aiofiles.open(args.data, "a") as w:
             pass
