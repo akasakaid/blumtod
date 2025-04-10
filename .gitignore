@@ -1,5 +1,6 @@
 *.log
 *.json
+!config.json
 *.py
 !bot.py
 *.html

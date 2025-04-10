@@ -6,7 +6,6 @@ import httpx
 import random
 import asyncio
 import argparse
-import ua_generator
 import httpx_socks
 from base64 import b64decode
 from datetime import datetime
