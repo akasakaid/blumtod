@@ -71,10 +71,11 @@ This script/program supports several argument parameters that can be used. Here'
 
 ## About Proxies
 
-Register on the following website to get free proxies: [Here](https://www.webshare.io/?referral_code=dwj0m9cdi4mp)
+<a href="https://www.swiftproxy.net/?ref=blumtod" target="_blank"><img src="https://raw.githubusercontent.com/akasakaid/blumtod/main/images/swiftproxy.png" width="250"></a>
 
-Website with the cheapest proxy price $1/GB [Here](https://dataimpulse.com/?aff=48082)
+<a href="https://www.swiftproxy.net/?ref=blumtod" target="_blank">Swiftproxy</a>: Get the best proxy service with 80M+ residential IPs. Extract public data from any website quickly, safely, and at scale.
 
+---
 You can add proxy lists in the `proxies.txt` file, and the proxy format is as follows:
 
 If there is authentication:
