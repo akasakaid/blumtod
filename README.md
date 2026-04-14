@@ -73,7 +73,7 @@ This script/program supports several argument parameters that can be used. Here'
 
 <a href="https://www.swiftproxy.net/?ref=blumtod" target="_blank"><img src="https://raw.githubusercontent.com/akasakaid/blumtod/main/images/swiftproxy.png" width="250"></a>
 
-<a href="https://www.swiftproxy.net/?ref=blumtod" target="_blank">Swiftproxy</a>: Get the best proxy service with 80M+ residential IPs. Extract public data from any website quickly, safely, and at scale.
+<a href="https://www.swiftproxy.net/?ref=blumtod" target="_blank">Swiftproxy</a> offers scalable residential proxies with 80M+ IPs across 195+ countries, ensuring fast, reliable connections, automatic rotation, and strong anti-block performance. Free trial available. Use code `PROXY90` for 10% off.
 
 ---
 You can add proxy lists in the `proxies.txt` file, and the proxy format is as follows:
