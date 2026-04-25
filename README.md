@@ -76,6 +76,11 @@ This script/program supports several argument parameters that can be used. Here'
 <a href="https://www.swiftproxy.net/?ref=blumtod" target="_blank">Swiftproxy</a> offers scalable residential proxies with 80M+ IPs across 195+ countries, ensuring fast, reliable connections, automatic rotation, and strong anti-block performance. Free trial available. Use code `PROXY90` for 10% off.
 
 ---
+<a href="https://dashboard.thordata.com/register?invitation_code=B01R4I4P" target="_blank"><img src="https://raw.githubusercontent.com/akasakaid/blumtod/main/images/thordata.jpg" width="250"></a>
+
+<a href="https://dashboard.thordata.com/register?invitation_code=B01R4I4P" target="_blank">Thordata</a> precision proxy solution was chosen to ensure seamless data collection. Enjoy the best prices and services tailored to your needs. Use code `blumtod30` for 30% off.
+
+---
 You can add proxy lists in the `proxies.txt` file, and the proxy format is as follows:
 
 If there is authentication:
